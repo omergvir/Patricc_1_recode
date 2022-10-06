@@ -1,0 +1,394 @@
+Child utterance	Child	00:00:14.318	00:00:14.818	00:00:00.500	utterance
+Child utterance	Child	00:00:47.182	00:00:47.864	00:00:00.682	utterance
+Child utterance	Child	00:00:51.597	00:00:52.643	00:00:01.046	utterance
+Child utterance	Child	00:01:05.857	00:01:07.357	00:00:01.500	utterance
+Child utterance	Child	00:01:23.096	00:01:23.823	00:00:00.727	utterance
+Child utterance	Child	00:01:52.776	00:01:53.821	00:00:01.045	utterance
+Child utterance	Child	00:01:54.549	00:01:55.821	00:00:01.272	utterance
+Child utterance	Child	00:02:16.994	00:02:17.721	00:00:00.727	utterance
+Child utterance	Child	00:02:22.355	00:02:22.719	00:00:00.364	other vocalization
+Child utterance	Child	00:04:42.381	00:04:43.609	00:00:01.228	utterance
+Child utterance	Child	00:04:47.903	00:04:49.676	00:00:01.773	utterance
+Child utterance	Child	00:05:02.772	00:05:03.591	00:00:00.819	utterance
+Child utterance	Child	00:05:34.136	00:05:35.272	00:00:01.136	utterance
+Child gaze	Child	00:00:08.409	00:00:10.454	00:00:02.045	robot
+Child gaze	Child	00:00:10.454	00:00:11.454	00:00:01.000	parent
+Child gaze	Child	00:00:11.545	00:00:13.454	00:00:01.909	robot
+Child gaze	Child	00:00:13.999	00:00:14.863	00:00:00.864	parent
+Child gaze	Child	00:00:15.227	00:00:46.954	00:00:31.727	robot
+Child gaze	Child	00:00:47.044	00:00:49.726	00:00:02.682	parent
+Child gaze	Child	00:00:57.226	00:01:04.999	00:00:07.773	robot
+Child gaze	Child	00:01:05.454	00:01:08.817	00:00:03.363	parent
+Child gaze	Child	00:01:09.135	00:01:21.590	00:00:12.455	robot
+Child gaze	Child	00:01:21.772	00:01:25.954	00:00:04.182	parent
+Child gaze	Child	00:01:26.135	00:01:54.453	00:00:28.318	robot
+Child gaze	Child	00:01:54.589	00:01:56.180	00:00:01.591	parent
+Child gaze	Child	00:01:56.567	00:02:00.930	00:00:04.363	robot
+Child gaze	Child	00:02:01.089	00:02:01.907	00:00:00.818	props
+Child gaze	Child	00:02:02.021	00:02:02.657	00:00:00.636	robot
+Child gaze	Child	00:02:02.771	00:02:03.953	00:00:01.182	props
+Child gaze	Child	00:02:04.135	00:02:04.408	00:00:00.273	robot
+Child gaze	Child	00:02:04.522	00:02:05.794	00:00:01.272	parent
+Child gaze	Child	00:02:05.885	00:02:06.975	00:00:01.090	props
+Child gaze	Child	00:02:07.134	00:02:07.953	00:00:00.819	robot
+Child gaze	Child	00:02:08.136	00:02:08.681	00:00:00.545	props
+Child gaze	Child	00:02:08.885	00:02:12.021	00:00:03.136	robot
+Child gaze	Child	00:02:12.248	00:02:21.976	00:00:09.728	props
+Child gaze	Child	00:02:22.044	00:02:23.499	00:00:01.455	parent
+Child gaze	Child	00:02:23.589	00:02:23.998	00:00:00.409	robot
+Child gaze	Child	00:02:24.134	00:02:26.679	00:00:02.545	props
+Child gaze	Child	00:02:26.792	00:02:27.247	00:00:00.455	parent
+Child gaze	Child	00:02:27.451	00:02:28.996	00:00:01.545	props
+Child gaze	Child	00:02:29.135	00:02:31.499	00:00:02.364	parent
+Child gaze	Child	00:02:31.564	00:02:32.337	00:00:00.773	robot
+Child gaze	Child	00:02:32.473	00:02:34.200	00:00:01.727	props
+Child gaze	Child	00:02:34.586	00:02:35.677	00:00:01.091	parent
+Child gaze	Child	00:02:35.835	00:02:36.290	00:00:00.455	props
+Child gaze	Child	00:02:36.403	00:02:37.857	00:00:01.454	robot
+Child gaze	Child	00:02:37.925	00:02:41.471	00:00:03.546	props
+Child gaze	Child	00:02:41.584	00:02:46.402	00:00:04.818	robot
+Child gaze	Child	00:02:46.454	00:02:47.506	00:00:01.052	parent
+Child gaze	Child	00:02:47.680	00:02:50.044	00:00:02.364	props
+Child gaze	Child	00:02:50.157	00:02:55.339	00:00:05.182	robot
+Child gaze	Child	00:02:55.452	00:02:59.362	00:00:03.910	props
+Child gaze	Child	00:02:59.475	00:03:00.657	00:00:01.182	robot
+Child gaze	Child	00:03:00.770	00:03:01.998	00:00:01.228	props
+Child gaze	Child	00:03:02.225	00:03:03.407	00:00:01.182	robot
+Child gaze	Child	00:03:03.520	00:03:07.339	00:00:03.819	props
+Child gaze	Child	00:03:07.543	00:03:08.133	00:00:00.590	robot
+Child gaze	Child	00:03:08.270	00:03:11.679	00:00:03.409	props
+Child gaze	Child	00:03:11.769	00:03:13.088	00:00:01.319	robot
+Child gaze	Child	00:03:13.314	00:03:15.405	00:00:02.091	props
+Child gaze	Child	00:03:15.473	00:03:17.563	00:00:02.090	robot
+Child gaze	Child	00:03:17.677	00:03:21.132	00:00:03.455	props
+Child gaze	Child	00:03:21.199	00:03:26.381	00:00:05.182	robot
+Child gaze	Child	00:03:26.540	00:03:27.858	00:00:01.318	props
+Child gaze	Child	00:03:27.949	00:03:29.313	00:00:01.364	robot
+Child gaze	Child	00:03:29.517	00:03:30.972	00:00:01.455	props
+Child gaze	Child	00:03:34.176	00:03:35.903	00:00:01.727	props
+Child gaze	Child	00:03:36.153	00:03:37.380	00:00:01.227	robot
+Child gaze	Child	00:03:37.561	00:03:38.516	00:00:00.955	props
+Child gaze	Child	00:03:39.044	00:03:40.772	00:00:01.728	parent
+Child gaze	Child	00:03:43.453	00:03:52.226	00:00:08.773	robot
+Child gaze	Child	00:03:52.407	00:03:58.953	00:00:06.546	props
+Child gaze	Child	00:03:59.021	00:04:06.566	00:00:07.545	robot
+Child gaze	Child	00:04:06.725	00:04:11.225	00:00:04.500	props
+Child gaze	Child	00:04:11.361	00:04:12.407	00:00:01.046	robot
+Child gaze	Child	00:04:12.588	00:04:14.452	00:00:01.864	props
+Child gaze	Child	00:04:14.679	00:04:17.361	00:00:02.682	robot
+Child gaze	Child	00:04:20.453	00:04:23.953	00:00:03.500	props
+Child gaze	Child	00:04:24.135	00:04:26.226	00:00:02.091	robot
+Child gaze	Child	00:04:26.294	00:04:28.384	00:00:02.090	props
+Child gaze	Child	00:04:28.543	00:04:29.362	00:00:00.819	robot
+Child gaze	Child	00:04:29.384	00:04:31.293	00:00:01.909	parent
+Child gaze	Child	00:04:31.406	00:04:33.315	00:00:01.909	props
+Child gaze	Child	00:04:33.474	00:04:34.655	00:00:01.181	parent
+Child gaze	Child	00:04:36.314	00:04:42.132	00:00:05.818	robot
+Child gaze	Child	00:04:42.272	00:04:44.408	00:00:02.136	parent
+Child gaze	Child	00:04:44.726	00:04:48.544	00:00:03.818	robot
+Child gaze	Child	00:04:48.681	00:04:52.999	00:00:04.318	parent
+Child gaze	Child	00:04:53.271	00:04:54.499	00:00:01.228	robot
+Child gaze	Child	00:04:54.726	00:04:59.771	00:00:05.045	props
+Child gaze	Child	00:04:59.998	00:05:02.680	00:00:02.682	robot
+Child gaze	Child	00:05:02.726	00:05:04.271	00:00:01.545	parent
+Child gaze	Child	00:05:04.362	00:05:11.180	00:00:06.818	props
+Child gaze	Child	00:05:11.294	00:05:20.248	00:00:08.954	robot
+Child gaze	Child	00:05:20.385	00:05:27.066	00:00:06.681	props
+Child gaze	Child	00:05:27.157	00:05:28.884	00:00:01.727	robot
+Child gaze	Child	00:05:31.317	00:05:38.453	00:00:07.136	robot
+Child affect	Child	00:00:10.272	00:00:10.909	00:00:00.637	positive 2
+Child affect	Child	00:00:11.090	00:00:13.863	00:00:02.773	positive 1
+Child affect	Child	00:00:13.909	00:00:16.636	00:00:02.727	positive 2
+Child affect	Child	00:00:16.727	00:00:19.818	00:00:03.091	positive 1
+Child affect	Child	00:00:20.909	00:00:24.181	00:00:03.272	positive 2
+Child affect	Child	00:00:31.909	00:00:43.454	00:00:11.545	positive 2
+Child affect	Child	00:00:43.499	00:00:50.772	00:00:07.273	positive 1
+Child affect	Child	00:00:56.180	00:00:57.680	00:00:01.500	positive 3
+Child affect	Child	00:00:57.839	00:01:01.839	00:00:04.000	positive 1
+Child affect	Child	00:01:06.384	00:01:08.021	00:00:01.637	positive 1
+Child affect	Child	00:01:21.929	00:01:26.111	00:00:04.182	positive 1
+Child affect	Child	00:01:37.701	00:01:39.428	00:00:01.727	positive 1
+Child affect	Child	00:01:47.064	00:01:47.746	00:00:00.682	positive 1
+Child affect	Child	00:02:16.726	00:02:22.090	00:00:05.364	positive 1
+Child affect	Child	00:02:22.226	00:02:24.044	00:00:01.818	positive 2
+Child affect	Child	00:02:29.180	00:02:32.271	00:00:03.091	positive 1
+Child affect	Child	00:02:45.179	00:02:48.543	00:00:03.364	positive 3
+Child affect	Child	00:03:19.408	00:03:24.544	00:00:05.136	positive 1
+Child affect	Child	00:03:30.976	00:03:33.976	00:00:03.000	positive 1
+Child affect	Child	00:03:37.158	00:03:43.476	00:00:06.318	positive 3
+Child affect	Child	00:04:00.863	00:04:03.726	00:00:02.863	positive 1
+Child affect	Child	00:04:15.021	00:04:19.067	00:00:04.046	positive 1
+Child affect	Child	00:04:38.477	00:04:44.704	00:00:06.227	positive 2
+Child affect	Child	00:04:52.908	00:04:56.953	00:00:04.045	positive 1
+Child affect	Child	00:05:01.384	00:05:04.839	00:00:03.455	positive 2
+Child affect	Child	00:05:30.226	00:05:32.226	00:00:02.000	positive 1
+Child affect	Child	00:05:34.408	00:05:35.317	00:00:00.909	positive 2
+Child gesture	Child	00:00:19.954	00:00:22.499	00:00:02.545	point at prop
+Child gesture	Child	00:00:32.545	00:00:36.545	00:00:04.000	point at prop
+Child gesture	Child	00:01:34.734	00:01:36.234	00:00:01.500	other
+Child gesture	Child	00:01:54.708	00:01:55.981	00:00:01.273	other
+Child gesture	Child	00:02:17.048	00:02:18.821	00:00:01.773	point at prop
+Child gesture	Child	00:04:08.626	00:04:09.672	00:00:01.046	point at prop
+Parent utterance	Parent	00:00:54.204	00:00:54.477	00:00:00.273	utterance
+Parent utterance	Parent	00:01:20.529	00:01:21.302	00:00:00.773	utterance
+Parent utterance	Parent	00:01:26.593	00:01:27.502	00:00:00.909	utterance
+Parent utterance	Parent	00:02:01.992	00:02:04.538	00:00:02.546	missing data
+Parent utterance	Parent	00:02:06.730	00:02:08.139	00:00:01.409	utterance
+Parent utterance	Parent	00:02:17.968	00:02:18.832	00:00:00.864	utterance
+Parent utterance	Parent	00:02:34.548	00:02:36.093	00:00:01.545	utterance
+Parent utterance	Parent	00:02:36.821	00:02:37.502	00:00:00.681	utterance
+Parent utterance	Parent	00:02:39.957	00:02:40.457	00:00:00.500	utterance
+Parent utterance	Parent	00:02:46.139	00:02:47.002	00:00:00.863	utterance
+Parent utterance	Parent	00:02:49.911	00:02:51.821	00:00:01.910	utterance
+Parent utterance	Parent	00:02:55.002	00:02:55.684	00:00:00.682	utterance
+Parent utterance	Parent	00:02:59.730	00:03:01.821	00:00:02.091	utterance
+Parent utterance	Parent	00:03:05.275	00:03:09.002	00:00:03.727	utterance
+Parent utterance	Parent	00:03:10.366	00:03:11.002	00:00:00.636	utterance
+Parent utterance	Parent	00:03:15.366	00:03:15.593	00:00:00.227	utterance
+Parent utterance	Parent	00:03:16.411	00:03:17.411	00:00:01.000	utterance
+Parent utterance	Parent	00:03:27.002	00:03:27.774	00:00:00.772	utterance
+Parent utterance	Parent	00:03:31.729	00:03:32.456	00:00:00.727	utterance
+Parent utterance	Parent	00:03:32.774	00:03:33.547	00:00:00.773	utterance
+Parent utterance	Parent	00:03:33.911	00:03:35.093	00:00:01.182	utterance
+Parent utterance	Parent	00:03:44.728	00:03:45.638	00:00:00.910	utterance
+Parent utterance	Parent	00:04:05.091	00:04:06.046	00:00:00.955	utterance
+Parent utterance	Parent	00:04:06.500	00:04:07.228	00:00:00.728	utterance
+Parent utterance	Parent	00:04:09.046	00:04:09.637	00:00:00.591	utterance
+Parent utterance	Parent	00:04:15.319	00:04:16.137	00:00:00.818	utterance
+Parent utterance	Parent	00:04:16.591	00:04:17.410	00:00:00.819	utterance
+Parent utterance	Parent	00:04:19.682	00:04:21.500	00:00:01.818	utterance
+Parent utterance	Parent	00:04:25.228	00:04:27.228	00:00:02.000	utterance
+Parent utterance	Parent	00:04:31.546	00:04:33.137	00:00:01.591	missing data
+Parent utterance	Parent	00:04:39.773	00:04:40.728	00:00:00.955	utterance
+Parent utterance	Parent	00:04:43.866	00:04:44.957	00:00:01.091	utterance
+Parent utterance	Parent	00:04:49.800	00:04:50.891	00:00:01.091	utterance
+Parent utterance	Parent	00:04:55.682	00:04:57.682	00:00:02.000	utterance
+Parent utterance	Parent	00:05:03.136	00:05:04.000	00:00:00.864	utterance
+Parent utterance	Parent	00:05:05.272	00:05:06.545	00:00:01.273	utterance
+Parent utterance	Parent	00:05:19.000	00:05:20.954	00:00:01.954	utterance
+Parent utterance	Parent	00:05:21.909	00:05:22.500	00:00:00.591	utterance
+Parent utterance	Parent	00:05:32.818	00:05:34.136	00:00:01.318	utterance
+Verbal scaffolding	Parent	00:01:26.593	00:01:27.502	00:00:00.909	cognitive
+Verbal scaffolding	Parent	00:02:06.730	00:02:08.139	00:00:01.409	cognitive
+Verbal scaffolding	Parent	00:02:17.968	00:02:18.832	00:00:00.864	technical
+Verbal scaffolding	Parent	00:02:34.548	00:02:36.093	00:00:01.545	cognitive
+Verbal scaffolding	Parent	00:02:36.821	00:02:37.502	00:00:00.681	cognitive
+Verbal scaffolding	Parent	00:02:39.957	00:02:40.457	00:00:00.500	technical
+Verbal scaffolding	Parent	00:02:46.139	00:02:47.002	00:00:00.863	affective
+Verbal scaffolding	Parent	00:02:49.911	00:02:51.821	00:00:01.910	affective
+Verbal scaffolding	Parent	00:02:55.002	00:02:55.684	00:00:00.682	affective
+Verbal scaffolding	Parent	00:02:59.730	00:03:01.821	00:00:02.091	technical
+Verbal scaffolding	Parent	00:03:05.275	00:03:09.002	00:00:03.727	technical
+Verbal scaffolding	Parent	00:03:10.366	00:03:11.002	00:00:00.636	technical
+Verbal scaffolding	Parent	00:03:15.366	00:03:15.593	00:00:00.227	cognitive
+Verbal scaffolding	Parent	00:03:16.411	00:03:17.411	00:00:01.000	cognitive
+Verbal scaffolding	Parent	00:03:27.002	00:03:27.774	00:00:00.772	technical
+Verbal scaffolding	Parent	00:03:31.729	00:03:32.456	00:00:00.727	cognitive
+Verbal scaffolding	Parent	00:03:32.774	00:03:33.547	00:00:00.773	cognitive
+Verbal scaffolding	Parent	00:03:33.911	00:03:35.093	00:00:01.182	cognitive
+Verbal scaffolding	Parent	00:03:44.728	00:03:45.638	00:00:00.910	cognitive
+Verbal scaffolding	Parent	00:04:05.091	00:04:06.046	00:00:00.955	instruction translation
+Verbal scaffolding	Parent	00:04:06.500	00:04:07.228	00:00:00.728	instruction translation
+Verbal scaffolding	Parent	00:04:09.046	00:04:09.637	00:00:00.591	cognitive
+Verbal scaffolding	Parent	00:04:15.319	00:04:16.137	00:00:00.818	affective
+Verbal scaffolding	Parent	00:04:16.591	00:04:17.410	00:00:00.819	affective
+Verbal scaffolding	Parent	00:04:19.682	00:04:21.500	00:00:01.818	instruction translation
+Verbal scaffolding	Parent	00:04:25.228	00:04:27.228	00:00:02.000	cognitive
+Verbal scaffolding	Parent	00:04:39.773	00:04:40.728	00:00:00.955	affective
+Verbal scaffolding	Parent	00:04:49.800	00:04:50.891	00:00:01.091	cognitive
+Verbal scaffolding	Parent	00:04:55.682	00:04:57.682	00:00:02.000	cognitive
+Verbal scaffolding	Parent	00:05:05.272	00:05:06.545	00:00:01.273	technical
+Verbal scaffolding	Parent	00:05:19.000	00:05:20.954	00:00:01.954	affective
+Verbal scaffolding	Parent	00:05:21.909	00:05:22.500	00:00:00.591	cognitive
+Verbal scaffolding	Parent	00:05:32.818	00:05:34.136	00:00:01.318	cognitive
+Parent gaze	Parent	00:00:08.318	00:00:09.818	00:00:01.500	robot
+Parent gaze	Parent	00:00:09.863	00:00:11.636	00:00:01.773	child
+Parent gaze	Parent	00:00:11.681	00:00:14.136	00:00:02.455	robot
+Parent gaze	Parent	00:00:14.272	00:00:14.636	00:00:00.364	child
+Parent gaze	Parent	00:00:14.727	00:00:24.363	00:00:09.636	robot
+Parent gaze	Parent	00:00:24.454	00:00:28.045	00:00:03.591	child
+Parent gaze	Parent	00:00:28.226	00:00:39.635	00:00:11.409	robot
+Parent gaze	Parent	00:00:41.954	00:00:47.317	00:00:05.363	robot
+Parent gaze	Parent	00:00:47.454	00:01:07.090	00:00:19.636	child
+Parent gaze	Parent	00:01:07.226	00:01:07.817	00:00:00.591	child
+Parent gaze	Parent	00:01:07.863	00:01:15.726	00:00:07.863	robot
+Parent gaze	Parent	00:01:15.817	00:01:24.544	00:00:08.727	child
+Parent gaze	Parent	00:01:24.726	00:01:53.817	00:00:29.091	robot
+Parent gaze	Parent	00:01:53.908	00:01:56.089	00:00:02.181	child
+Parent gaze	Parent	00:01:56.294	00:01:59.476	00:00:03.182	robot
+Parent gaze	Parent	00:01:59.589	00:02:01.544	00:00:01.955	props
+Parent gaze	Parent	00:02:03.543	00:02:04.180	00:00:00.637	props
+Parent gaze	Parent	00:02:04.293	00:02:05.384	00:00:01.091	child
+Parent gaze	Parent	00:02:05.542	00:02:06.906	00:00:01.364	props
+Parent gaze	Parent	00:02:07.065	00:02:07.838	00:00:00.773	child
+Parent gaze	Parent	00:02:07.974	00:02:10.292	00:00:02.318	props
+Parent gaze	Parent	00:02:10.474	00:02:10.928	00:00:00.454	robot
+Parent gaze	Parent	00:02:11.087	00:02:22.405	00:00:11.318	props
+Parent gaze	Parent	00:02:22.590	00:02:23.363	00:00:00.773	child
+Parent gaze	Parent	00:02:23.678	00:02:25.860	00:00:02.182	robot
+Parent gaze	Parent	00:02:26.064	00:02:28.928	00:00:02.864	props
+Parent gaze	Parent	00:02:29.090	00:02:31.226	00:00:02.136	child
+Parent gaze	Parent	00:02:31.430	00:02:36.748	00:00:05.318	robot
+Parent gaze	Parent	00:02:36.884	00:02:41.021	00:00:04.137	props
+Parent gaze	Parent	00:02:41.202	00:02:45.838	00:00:04.636	robot
+Parent gaze	Parent	00:02:46.135	00:02:50.408	00:00:04.273	child
+Parent gaze	Parent	00:02:51.406	00:02:57.861	00:00:06.455	robot
+Parent gaze	Parent	00:02:57.928	00:03:11.747	00:00:13.819	props
+Parent gaze	Parent	00:03:11.882	00:03:12.200	00:00:00.318	robot
+Parent gaze	Parent	00:03:12.314	00:03:14.587	00:00:02.273	props
+Parent gaze	Parent	00:03:14.609	00:03:16.291	00:00:01.682	child
+Parent gaze	Parent	00:03:16.427	00:03:26.018	00:00:09.591	robot
+Parent gaze	Parent	00:03:26.108	00:03:29.199	00:00:03.091	props
+Parent gaze	Parent	00:03:29.448	00:03:31.085	00:00:01.637	robot
+Parent gaze	Parent	00:03:32.044	00:03:33.953	00:00:01.909	child
+Parent gaze	Parent	00:03:34.045	00:03:35.908	00:00:01.863	props
+Parent gaze	Parent	00:03:36.044	00:03:37.226	00:00:01.182	robot
+Parent gaze	Parent	00:03:37.339	00:03:38.794	00:00:01.455	props
+Parent gaze	Parent	00:03:46.680	00:03:56.589	00:00:09.909	robot
+Parent gaze	Parent	00:04:00.136	00:04:03.181	00:00:03.045	child
+Parent gaze	Parent	00:04:05.226	00:04:16.953	00:00:11.727	child
+Parent gaze	Parent	00:04:18.361	00:04:19.815	00:00:01.454	props
+Parent gaze	Parent	00:04:20.317	00:04:27.771	00:00:07.454	child
+Parent gaze	Parent	00:04:27.908	00:04:35.999	00:00:08.091	robot
+Parent gaze	Parent	00:04:38.408	00:04:43.954	00:00:05.546	child
+Parent gaze	Parent	00:04:45.999	00:04:48.272	00:00:02.273	robot
+Parent gaze	Parent	00:04:48.590	00:04:52.272	00:00:03.682	child
+Parent gaze	Parent	00:04:52.385	00:04:55.703	00:00:03.318	robot
+Parent gaze	Parent	00:04:55.794	00:05:00.203	00:00:04.409	props
+Parent gaze	Parent	00:05:00.430	00:05:02.293	00:00:01.863	robot
+Parent gaze	Parent	00:05:02.520	00:05:03.520	00:00:01.000	child
+Parent gaze	Parent	00:05:03.679	00:05:07.906	00:00:04.227	props
+Parent gaze	Parent	00:05:08.042	00:05:11.860	00:00:03.818	robot
+Parent gaze	Parent	00:05:27.954	00:05:37.726	00:00:09.772	child
+Parent affect	Parent	00:00:09.499	00:00:10.681	00:00:01.182	positive 1
+Parent affect	Parent	00:00:10.818	00:00:14.545	00:00:03.727	positive 2
+Parent affect	Parent	00:00:14.545	00:00:21.090	00:00:06.545	positive 1
+Parent affect	Parent	00:00:21.181	00:00:23.272	00:00:02.091	positive 2
+Parent affect	Parent	00:00:28.818	00:00:31.545	00:00:02.727	positive 1
+Parent affect	Parent	00:01:10.363	00:01:11.863	00:00:01.500	positive 1
+Parent affect	Parent	00:01:23.613	00:01:27.840	00:00:04.227	positive 1
+Parent affect	Parent	00:02:29.908	00:02:34.272	00:00:04.364	positive 2
+Parent affect	Parent	00:02:45.681	00:02:51.181	00:00:05.500	positive 3
+Parent affect	Parent	00:03:22.044	00:03:25.953	00:00:03.909	positive 1
+Parent affect	Parent	00:03:36.998	00:03:39.180	00:00:02.182	positive 1
+Parent affect	Parent	00:03:39.452	00:03:43.452	00:00:04.000	positive 2
+Parent affect	Parent	00:04:01.588	00:04:04.983	00:00:03.395	positive 2
+Parent affect	Parent	00:04:14.558	00:04:19.648	00:00:05.090	positive 2
+Parent affect	Parent	00:04:30.466	00:04:32.194	00:00:01.728	positive 1
+Parent affect	Parent	00:04:44.693	00:04:48.512	00:00:03.819	positive 1
+Parent affect	Parent	00:05:02.193	00:05:04.875	00:00:02.682	positive 2
+Parent affect	Parent	00:05:11.170	00:05:14.897	00:00:03.727	positive 1
+Parent affect	Parent	00:05:19.851	00:05:22.078	00:00:02.227	positive 1
+Parent affect	Parent	00:05:27.827	00:05:30.691	00:00:02.864	positive 1
+Parent gesture	Parent	00:01:26.695	00:01:27.514	00:00:00.819	point at prop
+Parent gesture	Parent	00:02:00.504	00:02:03.095	00:00:02.591	point at prop
+Parent gesture	Parent	00:02:05.844	00:02:06.799	00:00:00.955	point at prop
+Parent gesture	Parent	00:02:06.821	00:02:07.457	00:00:00.636	other
+Parent gesture	Parent	00:02:26.752	00:02:27.843	00:00:01.091	point at prop
+Parent gesture	Parent	00:02:59.045	00:03:01.317	00:00:02.272	point at prop
+Parent gesture	Parent	00:03:06.681	00:03:07.363	00:00:00.682	point at prop
+Parent gesture	Parent	00:03:08.295	00:03:11.295	00:00:03.000	point at prop
+Parent gesture	Parent	00:03:16.249	00:03:17.068	00:00:00.819	point at prop
+Parent gesture	Parent	00:03:25.749	00:03:27.476	00:00:01.727	point at prop
+Parent gesture	Parent	00:04:47.954	00:04:53.454	00:00:05.500	point at prop
+Parent gesture	Parent	00:04:56.113	00:04:56.977	00:00:00.864	point at prop
+Parent gesture	Parent	00:05:05.545	00:05:06.818	00:00:01.273	point at prop
+Parent affective touch	Parent	00:02:35.272	00:02:36.181	00:00:00.909	
+Parent affective touch	Parent	00:03:44.999	00:03:46.544	00:00:01.545	
+Parent affective touch	Parent	00:04:16.318	00:04:17.136	00:00:00.818	
+Parent affective touch	Parent	00:04:41.089	00:04:42.089	00:00:01.000	
+Child prop manipulation		00:02:08.908	00:02:12.544	00:00:03.636	child
+Child prop manipulation		00:02:19.317	00:02:20.589	00:00:01.272	child
+Child prop manipulation		00:02:25.590	00:02:33.408	00:00:07.818	child
+Child prop manipulation		00:02:40.545	00:02:44.636	00:00:04.091	child
+Child prop manipulation		00:02:49.862	00:02:54.771	00:00:04.909	child
+Child prop manipulation		00:02:59.180	00:03:04.589	00:00:05.409	child
+Child prop manipulation		00:03:05.589	00:03:08.908	00:00:03.319	child
+Child prop manipulation		00:03:11.090	00:03:14.908	00:00:03.818	child
+Child prop manipulation		00:03:18.680	00:03:20.817	00:00:02.137	child
+Child prop manipulation		00:03:27.499	00:03:30.135	00:00:02.636	child
+Child prop manipulation		00:03:35.317	00:03:38.589	00:00:03.272	child
+Child prop manipulation		00:04:09.953	00:04:14.226	00:00:04.273	child
+Child prop manipulation		00:04:23.226	00:04:27.408	00:00:04.182	child
+Child prop manipulation		00:04:51.908	00:04:55.181	00:00:03.273	child
+Child prop manipulation		00:04:58.454	00:05:02.136	00:00:03.682	child
+Child prop manipulation		00:05:07.135	00:05:10.271	00:00:03.136	child
+Child prop manipulation		00:05:16.818	00:05:21.090	00:00:04.272	child
+Child prop manipulation		00:05:24.772	00:05:28.908	00:00:04.136	child
+Parent prop manipulation	Parent	00:02:13.272	00:02:19.318	00:00:06.046	parent
+Parent prop manipulation	Parent	00:02:38.226	00:02:38.999	00:00:00.773	parent
+robot pointing		00:00:35.416	00:00:37.499	00:00:02.083	point at prop
+robot pointing		00:00:44.833	00:00:46.833	00:00:02.000	point at prop
+robot pointing		00:00:56.833	00:00:59.499	00:00:02.666	point at prop
+robot pointing		00:01:05.832	00:01:08.665	00:00:02.833	point at prop
+robot pointing		00:01:35.082	00:01:36.916	00:00:01.834	point at prop
+robot pointing		00:01:36.998	00:01:39.332	00:00:02.334	point at prop
+robot pointing		00:01:39.332	00:01:41.499	00:00:02.167	point at prop
+robot pointing		00:01:41.582	00:01:43.999	00:00:02.417	point at prop
+robot pointing		00:01:43.999	00:01:46.249	00:00:02.250	point at prop
+robot pointing		00:01:50.332	00:01:52.999	00:00:02.667	point at prop
+robot pointing		00:02:26.249	00:02:28.916	00:00:02.667	point at prop
+robot pointing		00:02:46.082	00:02:48.665	00:00:02.583	point at prop
+robot pointing		00:02:56.666	00:02:59.416	00:00:02.750	point at prop
+robot pointing		00:03:16.082	00:03:19.499	00:00:03.417	point at prop
+robot pointing		00:03:46.416	00:03:48.666	00:00:02.250	point at prop
+robot pointing		00:03:49.165	00:03:51.998	00:00:02.833	point at prop
+robot pointing		00:03:51.998	00:03:54.082	00:00:02.084	point at prop
+robot pointing		00:03:54.082	00:03:56.249	00:00:02.167	point at prop
+robot pointing		00:03:56.416	00:03:59.582	00:00:03.166	point at prop
+robot text		00:00:08.166	00:00:09.499	00:00:01.333	other
+robot text		00:00:10.916	00:00:13.499	00:00:02.583	other
+robot text		00:00:13.999	00:00:15.999	00:00:02.000	other
+robot text		00:00:18.333	00:01:25.916	00:01:07.583	song
+robot text		00:01:32.249	00:01:34.916	00:00:02.667	other
+robot text		00:01:35.082	00:01:36.916	00:00:01.834	teach
+robot text		00:01:36.998	00:01:39.332	00:00:02.334	teach
+robot text		00:01:39.332	00:01:41.499	00:00:02.167	teach
+robot text		00:01:41.582	00:01:43.999	00:00:02.417	teach
+robot text		00:01:43.999	00:01:46.249	00:00:02.250	teach
+robot text		00:01:46.332	00:01:48.998	00:00:02.666	other
+robot text		00:01:50.332	00:01:52.999	00:00:02.667	teach
+robot text		00:01:52.999	00:01:56.165	00:00:03.166	pick up
+robot text		00:02:06.332	00:02:08.332	00:00:02.000	try again
+robot text		00:02:09.498	00:02:12.415	00:00:02.917	pick up
+robot text		00:02:14.166	00:02:16.832	00:00:02.666	positive feedback
+robot text		00:02:17.915	00:02:20.249	00:00:02.334	put down
+robot text		00:02:21.915	00:02:25.748	00:00:03.833	positive feedback
+robot text		00:02:26.249	00:02:28.832	00:00:02.583	teach
+robot text		00:02:28.832	00:02:31.666	00:00:02.834	pick up
+robot text		00:02:42.165	00:02:45.082	00:00:02.917	pick up
+robot text		00:02:46.082	00:02:48.665	00:00:02.583	teach
+robot text		00:02:48.665	00:02:50.915	00:00:02.250	pick up
+robot text		00:02:52.665	00:02:56.499	00:00:03.834	positive feedback
+robot text		00:02:56.666	00:02:59.416	00:00:02.750	teach
+robot text		00:03:00.582	00:03:03.416	00:00:02.834	put down
+robot text		00:03:05.082	00:03:06.748	00:00:01.666	try again
+robot text		00:03:08.999	00:03:11.166	00:00:02.167	put down
+robot text		00:03:13.082	00:03:15.916	00:00:02.834	positive feedback
+robot text		00:03:16.082	00:03:19.499	00:00:03.417	teach
+robot text		00:03:20.082	00:03:22.582	00:00:02.500	put down
+robot text		00:03:24.498	00:03:26.498	00:00:02.000	try again
+robot text		00:03:27.665	00:03:29.665	00:00:02.000	pick up
+robot text		00:03:36.499	00:03:39.332	00:00:02.833	positive feedback
+robot text		00:03:42.499	00:03:44.666	00:00:02.167	other
+robot text		00:03:46.416	00:03:48.666	00:00:02.250	teach
+robot text		00:03:49.165	00:03:51.998	00:00:02.833	teach
+robot text		00:03:51.998	00:03:54.082	00:00:02.084	teach
+robot text		00:03:54.082	00:03:56.249	00:00:02.167	teach
+robot text		00:03:56.416	00:03:59.582	00:00:03.166	teach
+robot text		00:04:01.749	00:04:04.499	00:00:02.750	pick up
+robot text		00:04:13.082	00:04:15.582	00:00:02.500	positive feedback
+robot text		00:04:16.832	00:04:19.498	00:00:02.666	pick up
+robot text		00:04:26.332	00:04:27.999	00:00:01.667	positive feedback
+robot text		00:04:43.499	00:04:45.416	00:00:01.917	try again
+robot text		00:04:45.999	00:04:48.416	00:00:02.417	pick up
+robot text		00:05:00.499	00:05:03.165	00:00:02.666	put down
+robot text		00:05:03.248	00:05:05.665	00:00:02.417	pick up
+robot text		00:05:10.082	00:05:13.082	00:00:03.000	positive feedback
+robot text		00:05:14.166	00:05:16.916	00:00:02.750	pick up
+robot text		00:05:18.749	00:05:21.332	00:00:02.583	positive feedback
+robot text		00:05:22.665	00:05:25.165	00:00:02.500	pick up
+robot text		00:05:27.082	00:05:29.915	00:00:02.833	positive feedback
+robot text		00:05:30.582	00:05:32.998	00:00:02.416	other
+start-end		00:00:07.499	00:00:07.833	00:00:00.334	start
+start-end		00:05:33.416	00:05:33.833	00:00:00.417	end

@@ -1,0 +1,305 @@
+Child utterance	Child	00:00:16.240	00:00:18.200	00:00:01.960	utterance
+Child utterance	Child	00:00:51.700	00:00:54.100	00:00:02.400	utterance
+Child utterance	Child	00:01:32.180	00:01:34.020	00:00:01.840	utterance
+Child utterance	Child	00:03:01.080	00:03:01.800	00:00:00.720	utterance
+Child utterance	Child	00:03:13.320	00:03:15.320	00:00:02.000	utterance
+Child utterance	Child	00:03:22.940	00:03:24.100	00:00:01.160	utterance
+Child utterance	Child	00:04:13.000	00:04:14.880	00:00:01.880	utterance
+Child gaze	Child	00:00:05.120	00:01:01.040	00:00:55.920	tablet
+Child gaze	Child	00:01:02.720	00:01:32.600	00:00:29.880	tablet
+Child gaze	Child	00:01:34.160	00:03:32.720	00:01:58.560	tablet
+Child gaze	Child	00:03:32.800	00:03:33.720	00:00:00.920	parent
+Child gaze	Child	00:03:33.820	00:03:46.540	00:00:12.720	tablet
+Child gaze	Child	00:03:47.420	00:03:55.980	00:00:08.560	tablet
+Child gaze	Child	00:03:56.860	00:03:59.500	00:00:02.640	tablet
+Child gaze	Child	00:03:59.540	00:04:00.660	00:00:01.120	parent
+Child gaze	Child	00:04:00.740	00:05:11.620	00:01:10.880	tablet
+Child affect	Child	00:00:15.800	00:00:19.960	00:00:04.160	positive 2
+Child affect	Child	00:00:52.440	00:00:57.560	00:00:05.120	positive 1
+Child affect	Child	00:01:32.200	00:01:34.920	00:00:02.720	positive 2
+Child affect	Child	00:01:56.960	00:02:04.400	00:00:07.440	positive 1
+Child affect	Child	00:02:09.880	00:02:16.300	00:00:06.420	positive 2
+Child affect	Child	00:02:16.300	00:02:18.700	00:00:02.400	positive 1
+Child affect	Child	00:02:20.220	00:02:27.540	00:00:07.320	positive 1
+Child affect	Child	00:02:34.840	00:02:42.040	00:00:07.200	positive 1
+Child affect	Child	00:02:52.240	00:02:54.400	00:00:02.160	positive 1
+Child affect	Child	00:02:54.520	00:03:04.760	00:00:10.240	positive 2
+Child affect	Child	00:03:04.800	00:03:09.720	00:00:04.920	positive 1
+Child affect	Child	00:03:18.620	00:03:25.180	00:00:06.560	positive 1
+Child affect	Child	00:03:27.260	00:03:33.020	00:00:05.760	positive 1
+Child affect	Child	00:03:45.180	00:03:46.300	00:00:01.120	positive 1
+Child affect	Child	00:03:52.060	00:03:56.140	00:00:04.080	positive 1
+Child affect	Child	00:03:56.980	00:04:01.420	00:00:04.440	positive 1
+Child affect	Child	00:04:13.600	00:04:19.760	00:00:06.160	positive 1
+Child affect	Child	00:04:36.920	00:04:39.680	00:00:02.760	positive 1
+Child affect	Child	00:04:44.860	00:04:48.540	00:00:03.680	positive 1
+Child affect	Child	00:04:54.740	00:04:57.500	00:00:02.760	positive 1
+Child gesture	Child	00:00:53.360	00:00:58.840	00:00:05.480	point at prop
+Parent utterance	Parent	00:00:11.080	00:00:13.480	00:00:02.400	utterance
+Parent utterance	Parent	00:00:18.960	00:00:20.240	00:00:01.280	utterance
+Parent utterance	Parent	00:00:22.200	00:00:23.760	00:00:01.560	utterance
+Parent utterance	Parent	00:00:30.540	00:00:31.540	00:00:01.000	utterance
+Parent utterance	Parent	00:00:49.040	00:00:49.880	00:00:00.840	utterance
+Parent utterance	Parent	00:00:54.020	00:00:54.380	00:00:00.360	utterance
+Parent utterance	Parent	00:00:55.960	00:00:58.760	00:00:02.800	utterance
+Parent utterance	Parent	00:01:06.880	00:01:08.080	00:00:01.200	utterance
+Parent utterance	Parent	00:01:19.520	00:01:20.640	00:00:01.120	utterance
+Parent utterance	Parent	00:01:21.160	00:01:21.640	00:00:00.480	utterance
+Parent utterance	Parent	00:01:22.000	00:01:23.160	00:00:01.160	utterance
+Parent utterance	Parent	00:01:37.660	00:01:39.260	00:00:01.600	utterance
+Parent utterance	Parent	00:01:43.420	00:01:45.180	00:00:01.760	utterance
+Parent utterance	Parent	00:01:49.260	00:01:52.300	00:00:03.040	utterance
+Parent utterance	Parent	00:01:53.420	00:01:54.500	00:00:01.080	utterance
+Parent utterance	Parent	00:01:56.800	00:01:58.080	00:00:01.280	utterance
+Parent utterance	Parent	00:02:02.240	00:02:04.120	00:00:01.880	utterance
+Parent utterance	Parent	00:02:05.060	00:02:07.900	00:00:02.840	utterance
+Parent utterance	Parent	00:02:08.120	00:02:08.720	00:00:00.600	utterance
+Parent utterance	Parent	00:02:09.960	00:02:10.520	00:00:00.560	utterance
+Parent utterance	Parent	00:02:17.000	00:02:18.520	00:00:01.520	utterance
+Parent utterance	Parent	00:02:22.360	00:02:23.920	00:00:01.560	utterance
+Parent utterance	Parent	00:02:27.900	00:02:30.220	00:00:02.320	utterance
+Parent utterance	Parent	00:02:32.620	00:02:35.300	00:00:02.680	utterance
+Parent utterance	Parent	00:02:37.800	00:02:39.000	00:00:01.200	utterance
+Parent utterance	Parent	00:02:42.840	00:02:43.320	00:00:00.480	utterance
+Parent utterance	Parent	00:02:46.640	00:02:47.960	00:00:01.320	utterance
+Parent utterance	Parent	00:02:48.500	00:02:49.780	00:00:01.280	utterance
+Parent utterance	Parent	00:02:51.940	00:02:52.580	00:00:00.640	utterance
+Parent utterance	Parent	00:02:54.500	00:02:55.660	00:00:01.160	utterance
+Parent utterance	Parent	00:02:57.200	00:02:58.200	00:00:01.000	utterance
+Parent utterance	Parent	00:02:59.620	00:03:00.500	00:00:00.880	utterance
+Parent utterance	Parent	00:03:01.960	00:03:03.600	00:00:01.640	utterance
+Parent utterance	Parent	00:03:06.240	00:03:09.280	00:00:03.040	utterance
+Parent utterance	Parent	00:03:11.920	00:03:12.960	00:00:01.040	utterance
+Parent utterance	Parent	00:03:15.960	00:03:16.400	00:00:00.440	utterance
+Parent utterance	Parent	00:03:16.940	00:03:18.380	00:00:01.440	utterance
+Parent utterance	Parent	00:03:25.840	00:03:26.600	00:00:00.760	utterance
+Parent utterance	Parent	00:03:27.500	00:03:28.060	00:00:00.560	utterance
+Parent utterance	Parent	00:03:31.620	00:03:32.860	00:00:01.240	utterance
+Parent utterance	Parent	00:03:34.560	00:03:35.280	00:00:00.720	utterance
+Parent utterance	Parent	00:03:39.880	00:03:42.920	00:00:03.040	utterance
+Parent utterance	Parent	00:03:44.280	00:03:46.040	00:00:01.760	utterance
+Parent utterance	Parent	00:03:47.040	00:03:47.800	00:00:00.760	utterance
+Parent utterance	Parent	00:03:55.180	00:03:56.940	00:00:01.760	utterance
+Parent utterance	Parent	00:03:58.780	00:03:59.780	00:00:01.000	utterance
+Parent utterance	Parent	00:04:00.160	00:04:01.760	00:00:01.600	utterance
+Parent utterance	Parent	00:04:04.360	00:04:05.480	00:00:01.120	utterance
+Parent utterance	Parent	00:04:06.060	00:04:07.300	00:00:01.240	utterance
+Parent utterance	Parent	00:04:17.220	00:04:18.980	00:00:01.760	utterance
+Parent utterance	Parent	00:04:21.660	00:04:23.780	00:00:02.120	utterance
+Parent utterance	Parent	00:04:26.560	00:04:27.480	00:00:00.920	utterance
+Parent utterance	Parent	00:04:32.380	00:04:33.420	00:00:01.040	utterance
+Parent utterance	Parent	00:04:43.740	00:04:44.940	00:00:01.200	utterance
+Parent utterance	Parent	00:04:55.860	00:04:57.340	00:00:01.480	utterance
+Parent utterance	Parent	00:05:05.880	00:05:07.320	00:00:01.440	utterance
+Verbal scaffolding	Parent	00:00:49.040	00:00:49.880	00:00:00.840	cognitive
+Verbal scaffolding	Parent	00:01:06.880	00:01:08.080	00:00:01.200	cognitive
+Verbal scaffolding	Parent	00:01:37.660	00:01:39.260	00:00:01.600	cognitive
+Verbal scaffolding	Parent	00:01:43.420	00:01:45.180	00:00:01.760	cognitive
+Verbal scaffolding	Parent	00:01:49.260	00:01:52.300	00:00:03.040	technical
+Verbal scaffolding	Parent	00:01:53.420	00:01:54.500	00:00:01.080	affective
+Verbal scaffolding	Parent	00:01:56.800	00:01:58.080	00:00:01.280	affective
+Verbal scaffolding	Parent	00:02:02.240	00:02:04.120	00:00:01.880	cognitive
+Verbal scaffolding	Parent	00:02:05.060	00:02:07.900	00:00:02.840	technical
+Verbal scaffolding	Parent	00:02:17.000	00:02:18.520	00:00:01.520	cognitive
+Verbal scaffolding	Parent	00:02:27.900	00:02:30.220	00:00:02.320	cognitive
+Verbal scaffolding	Parent	00:02:32.620	00:02:35.300	00:00:02.680	cognitive
+Verbal scaffolding	Parent	00:02:46.640	00:02:47.960	00:00:01.320	cognitive
+Verbal scaffolding	Parent	00:02:48.500	00:02:49.780	00:00:01.280	instruction translation
+Verbal scaffolding	Parent	00:03:01.960	00:03:03.600	00:00:01.640	affective
+Verbal scaffolding	Parent	00:03:06.240	00:03:09.280	00:00:03.040	affective
+Verbal scaffolding	Parent	00:03:25.840	00:03:26.600	00:00:00.760	cognitive
+Verbal scaffolding	Parent	00:03:34.560	00:03:35.280	00:00:00.720	cognitive
+Verbal scaffolding	Parent	00:04:17.220	00:04:18.980	00:00:01.760	technical
+Verbal scaffolding	Parent	00:04:21.660	00:04:23.780	00:00:02.120	technical
+Verbal scaffolding	Parent	00:04:26.560	00:04:27.480	00:00:00.920	cognitive
+Non-verbal scaffolding	Parent	00:00:48.440	00:00:49.800	00:00:01.360	cognitive
+Non-verbal scaffolding	Parent	00:00:53.860	00:00:54.660	00:00:00.800	cognitive
+Non-verbal scaffolding	Parent	00:01:06.900	00:01:08.540	00:00:01.640	cognitive
+Non-verbal scaffolding	Parent	00:01:37.240	00:01:38.920	00:00:01.680	cognitive
+Non-verbal scaffolding	Parent	00:01:49.580	00:01:50.820	00:00:01.240	technical
+Non-verbal scaffolding	Parent	00:02:02.340	00:02:03.060	00:00:00.720	cognitive
+Non-verbal scaffolding	Parent	00:02:05.300	00:02:07.260	00:00:01.960	technical
+Non-verbal scaffolding	Parent	00:02:17.240	00:02:18.440	00:00:01.200	cognitive
+Non-verbal scaffolding	Parent	00:04:17.080	00:04:19.680	00:00:02.600	cognitive
+Non-verbal scaffolding	Parent	00:04:26.060	00:04:27.340	00:00:01.280	cognitive
+Non-verbal scaffolding	Parent	00:05:56.900	00:05:58.100	00:00:01.200	cognitive
+Non-verbal scaffolding	Parent	00:06:28.160	00:06:29.120	00:00:00.960	cognitive
+Parent gaze	Parent	00:00:04.960	00:00:07.920	00:00:02.960	tablet
+Parent gaze	Parent	00:00:08.000	00:00:08.920	00:00:00.920	child
+Parent gaze	Parent	00:00:09.040	00:00:11.080	00:00:02.040	tablet
+Parent gaze	Parent	00:00:11.200	00:00:14.080	00:00:02.880	child
+Parent gaze	Parent	00:00:14.160	00:00:18.920	00:00:04.760	tablet
+Parent gaze	Parent	00:00:19.440	00:00:22.440	00:00:03.000	tablet
+Parent gaze	Parent	00:00:22.560	00:00:24.400	00:00:01.840	child
+Parent gaze	Parent	00:00:24.480	00:00:30.240	00:00:05.760	tablet
+Parent gaze	Parent	00:00:30.320	00:00:32.000	00:00:01.680	child
+Parent gaze	Parent	00:00:32.040	00:00:52.200	00:00:20.160	tablet
+Parent gaze	Parent	00:00:52.280	00:00:52.680	00:00:00.400	child
+Parent gaze	Parent	00:00:52.760	00:01:08.920	00:00:16.160	tablet
+Parent gaze	Parent	00:01:08.960	00:01:09.960	00:00:01.000	child
+Parent gaze	Parent	00:01:10.020	00:01:19.940	00:00:09.920	tablet
+Parent gaze	Parent	00:01:20.020	00:01:24.060	00:00:04.040	child
+Parent gaze	Parent	00:01:24.120	00:01:42.320	00:00:18.200	tablet
+Parent gaze	Parent	00:01:42.420	00:01:43.060	00:00:00.640	child
+Parent gaze	Parent	00:01:43.140	00:01:56.500	00:00:13.360	tablet
+Parent gaze	Parent	00:01:56.580	00:01:57.820	00:00:01.240	child
+Parent gaze	Parent	00:01:57.840	00:02:09.880	00:00:12.040	tablet
+Parent gaze	Parent	00:02:09.980	00:02:11.500	00:00:01.520	child
+Parent gaze	Parent	00:02:11.540	00:02:26.820	00:00:15.280	tablet
+Parent gaze	Parent	00:02:26.940	00:02:28.100	00:00:01.160	child
+Parent gaze	Parent	00:02:28.160	00:02:38.120	00:00:09.960	tablet
+Parent gaze	Parent	00:02:38.220	00:02:38.820	00:00:00.600	child
+Parent gaze	Parent	00:02:38.920	00:02:42.640	00:00:03.720	tablet
+Parent gaze	Parent	00:02:42.780	00:02:43.300	00:00:00.520	child
+Parent gaze	Parent	00:02:43.320	00:02:54.240	00:00:10.920	tablet
+Parent gaze	Parent	00:02:54.340	00:02:55.820	00:00:01.480	child
+Parent gaze	Parent	00:02:55.840	00:02:59.680	00:00:03.840	tablet
+Parent gaze	Parent	00:02:59.760	00:03:01.200	00:00:01.440	child
+Parent gaze	Parent	00:03:01.360	00:03:06.320	00:00:04.960	tablet
+Parent gaze	Parent	00:03:06.400	00:03:08.960	00:00:02.560	child
+Parent gaze	Parent	00:03:09.040	00:03:12.160	00:00:03.120	tablet
+Parent gaze	Parent	00:03:12.280	00:03:12.840	00:00:00.560	child
+Parent gaze	Parent	00:03:12.920	00:03:24.960	00:00:12.040	tablet
+Parent gaze	Parent	00:03:25.060	00:03:25.900	00:00:00.840	child
+Parent gaze	Parent	00:03:25.960	00:03:31.520	00:00:05.560	tablet
+Parent gaze	Parent	00:03:31.620	00:03:32.780	00:00:01.160	child
+Parent gaze	Parent	00:03:32.840	00:03:34.360	00:00:01.520	tablet
+Parent gaze	Parent	00:03:34.400	00:03:35.280	00:00:00.880	child
+Parent gaze	Parent	00:03:35.400	00:03:44.280	00:00:08.880	tablet
+Parent gaze	Parent	00:03:44.440	00:03:46.600	00:00:02.160	child
+Parent gaze	Parent	00:03:46.760	00:03:58.880	00:00:12.120	tablet
+Parent gaze	Parent	00:03:59.020	00:04:00.420	00:00:01.400	child
+Parent gaze	Parent	00:04:00.480	00:04:44.200	00:00:43.720	tablet
+Parent gaze	Parent	00:04:44.260	00:04:44.500	00:00:00.240	child
+Parent gaze	Parent	00:04:44.540	00:04:55.140	00:00:10.600	tablet
+Parent gaze	Parent	00:04:55.160	00:04:58.920	00:00:03.760	child
+Parent gaze	Parent	00:04:59.000	00:05:12.800	00:00:13.800	tablet
+Parent affect	Parent	00:00:02.280	00:00:11.320	00:00:09.040	positive 2
+Parent affect	Parent	00:00:14.120	00:00:17.120	00:00:03.000	positive 1
+Parent affect	Parent	00:00:17.200	00:00:22.400	00:00:05.200	positive 3
+Parent affect	Parent	00:00:31.480	00:00:33.320	00:00:01.840	positive 2
+Parent affect	Parent	00:00:33.440	00:00:37.120	00:00:03.680	positive 1
+Parent affect	Parent	00:01:32.880	00:01:36.760	00:00:03.880	positive 1
+Parent affect	Parent	00:01:57.720	00:01:59.600	00:00:01.880	positive 2
+Parent affect	Parent	00:01:59.700	00:02:02.860	00:00:03.160	positive 1
+Parent affect	Parent	00:02:09.640	00:02:12.000	00:00:02.360	positive 3
+Parent affect	Parent	00:02:12.100	00:02:17.060	00:00:04.960	positive 1
+Parent affect	Parent	00:02:22.260	00:02:26.980	00:00:04.720	positive 2
+Parent affect	Parent	00:02:27.900	00:02:30.740	00:00:02.840	positive 2
+Parent affect	Parent	00:02:37.560	00:02:40.360	00:00:02.800	positive 2
+Parent affect	Parent	00:02:53.320	00:02:57.360	00:00:04.040	positive 3
+Parent affect	Parent	00:02:57.460	00:03:01.020	00:00:03.560	positive 1
+Parent affect	Parent	00:03:01.840	00:03:06.520	00:00:04.680	positive 1
+Parent affect	Parent	00:03:08.900	00:03:12.300	00:00:03.400	positive 2
+Parent affect	Parent	00:03:13.560	00:03:15.880	00:00:02.320	positive 1
+Parent affect	Parent	00:03:15.960	00:03:21.320	00:00:05.360	positive 2
+Parent affect	Parent	00:03:21.420	00:03:25.260	00:00:03.840	positive 1
+Parent affect	Parent	00:03:31.600	00:03:34.440	00:00:02.840	positive 1
+Parent affect	Parent	00:03:36.100	00:03:44.540	00:00:08.440	positive 2
+Parent affect	Parent	00:03:46.560	00:03:48.320	00:00:01.760	positive 3
+Parent affect	Parent	00:03:48.400	00:03:51.400	00:00:03.000	positive 2
+Parent affect	Parent	00:03:54.500	00:03:58.380	00:00:03.880	positive 1
+Parent affect	Parent	00:03:58.440	00:04:01.800	00:00:03.360	positive 2
+Parent affect	Parent	00:04:01.880	00:04:05.920	00:00:04.040	positive 1
+Parent affect	Parent	00:04:32.440	00:04:41.320	00:00:08.880	positive 1
+Parent affect	Parent	00:04:57.640	00:05:13.800	00:00:16.160	positive 1
+Parent gesture	Parent	00:00:48.440	00:00:49.800	00:00:01.360	point at prop
+Parent gesture	Parent	00:00:53.860	00:00:54.660	00:00:00.800	point at prop
+Parent gesture	Parent	00:01:06.900	00:01:08.540	00:00:01.640	point at prop
+Parent gesture	Parent	00:01:37.240	00:01:38.920	00:00:01.680	point at prop
+Parent gesture	Parent	00:01:49.580	00:01:50.820	00:00:01.240	point at prop
+Parent gesture	Parent	00:02:02.340	00:02:03.060	00:00:00.720	point at prop
+Parent gesture	Parent	00:02:05.300	00:02:07.260	00:00:01.960	point at prop
+Parent gesture	Parent	00:02:17.240	00:02:18.440	00:00:01.200	point at prop
+Parent gesture	Parent	00:02:26.420	00:02:27.140	00:00:00.720	point at prop
+Parent gesture	Parent	00:04:17.080	00:04:19.680	00:00:02.600	other
+Parent gesture	Parent	00:04:26.060	00:04:27.340	00:00:01.280	point at prop
+Parent gesture	Parent	00:05:56.900	00:05:58.100	00:00:01.200	point at prop
+Parent gesture	Parent	00:06:28.160	00:06:29.120	00:00:00.960	point at prop
+Parent gesture	Parent	00:06:53.380	00:06:54.020	00:00:00.640	other
+Parent gesture	Parent	00:06:55.140	00:06:55.620	00:00:00.480	other
+Parent affective touch	Parent	00:03:44.680	00:03:47.080	00:00:02.400	
+Parent affective touch	Parent	00:05:14.140	00:05:17.140	00:00:03.000	
+Parent affective touch	Parent	00:06:15.960	00:06:17.600	00:00:01.640	
+Child prop manipulation		00:01:52.400	00:01:55.640	00:00:03.240	child
+Child prop manipulation		00:02:04.540	00:02:09.180	00:00:04.640	child
+Child prop manipulation		00:02:20.040	00:02:22.240	00:00:02.200	child
+Child prop manipulation		00:02:33.180	00:02:35.300	00:00:02.120	child
+Child prop manipulation		00:02:51.120	00:02:52.960	00:00:01.840	child
+Child prop manipulation		00:03:01.800	00:03:04.280	00:00:02.480	child
+Child prop manipulation		00:03:14.280	00:03:18.720	00:00:04.440	child
+Child prop manipulation		00:03:36.740	00:03:39.260	00:00:02.520	child
+Child prop manipulation		00:03:50.320	00:03:52.000	00:00:01.680	child
+Child prop manipulation		00:04:44.180	00:04:44.700	00:00:00.520	child
+Child prop manipulation		00:04:52.920	00:04:54.840	00:00:01.920	child
+Child prop manipulation		00:05:05.160	00:05:06.840	00:00:01.680	child
+Child prop manipulation		00:05:17.360	00:05:19.760	00:00:02.400	child
+Child prop manipulation		00:05:32.160	00:05:35.200	00:00:03.040	child
+Child prop manipulation		00:05:43.840	00:05:45.240	00:00:01.400	child
+Child prop manipulation		00:05:59.020	00:06:00.060	00:00:01.040	child
+Child prop manipulation		00:06:08.740	00:06:11.260	00:00:02.520	child
+Child prop manipulation		00:06:30.400	00:06:32.160	00:00:01.760	child
+Child prop manipulation		00:06:36.720	00:06:38.240	00:00:01.520	child
+Child prop manipulation		00:06:42.720	00:06:44.200	00:00:01.480	child
+robot pointing		00:00:34.066	00:00:35.133	00:00:01.067	point at prop
+robot pointing		00:00:45.266	00:00:45.733	00:00:00.467	point at prop
+robot pointing		00:00:54.999	00:00:55.666	00:00:00.667	point at prop
+robot pointing		00:01:04.933	00:01:05.733	00:00:00.800	point at prop
+robot pointing		00:01:34.733	00:01:37.333	00:00:02.600	point at prop
+robot pointing		00:02:15.066	00:02:17.932	00:00:02.866	point at prop
+robot pointing		00:02:41.066	00:02:43.066	00:00:02.000	point at prop
+robot pointing		00:03:09.199	00:03:11.799	00:00:02.600	point at prop
+robot pointing		00:03:32.600	00:03:34.466	00:00:01.866	point at prop
+robot pointing		00:04:09.599	00:04:11.799	00:00:02.200	point at prop
+robot pointing		00:04:15.465	00:04:18.132	00:00:02.667	point at prop
+robot pointing		00:04:20.199	00:04:22.399	00:00:02.200	point at prop
+robot pointing		00:04:24.399	00:04:26.465	00:00:02.066	point at prop
+robot pointing		00:04:29.266	00:04:31.933	00:00:02.667	point at prop
+robot text		00:00:08.733	00:00:10.533	00:00:01.800	other
+robot text		00:00:13.333	00:00:14.399	00:00:01.066	other
+robot text		00:00:17.599	00:01:24.466	00:01:06.867	song
+robot text		00:01:29.532	00:01:30.932	00:00:01.400	other
+robot text		00:01:34.733	00:01:37.333	00:00:02.600	teach
+robot text		00:01:39.932	00:01:42.865	00:00:02.933	pick up
+robot text		00:01:54.933	00:01:56.999	00:00:02.066	positive feedback
+robot text		00:02:00.332	00:02:02.332	00:00:02.000	put down
+robot text		00:02:09.066	00:02:11.199	00:00:02.133	positive feedback
+robot text		00:02:15.066	00:02:17.932	00:00:02.866	teach
+robot text		00:02:19.932	00:02:22.199	00:00:02.267	pick up
+robot text		00:02:25.865	00:02:27.932	00:00:02.067	positive feedback
+robot text		00:02:30.732	00:02:32.732	00:00:02.000	put down
+robot text		00:02:35.599	00:02:37.999	00:00:02.400	positive feedback
+robot text		00:02:41.066	00:02:43.066	00:00:02.000	teach
+robot text		00:02:45.199	00:02:46.732	00:00:01.533	pick up
+robot text		00:02:53.466	00:02:55.732	00:00:02.266	positive feedback
+robot text		00:02:57.666	00:02:59.533	00:00:01.867	put down
+robot text		00:03:03.999	00:03:06.266	00:00:02.267	positive feedback
+robot text		00:03:09.199	00:03:11.799	00:00:02.600	teach
+robot text		00:03:14.532	00:03:16.266	00:00:01.734	pick up
+robot text		00:03:18.999	00:03:21.066	00:00:02.067	positive feedback
+robot text		00:03:23.933	00:03:25.466	00:00:01.533	put down
+robot text		00:03:28.000	00:03:30.533	00:00:02.533	positive feedback
+robot text		00:03:32.600	00:03:34.466	00:00:01.866	teach
+robot text		00:03:37.932	00:03:39.799	00:00:01.867	pick up
+robot text		00:03:43.400	00:03:45.666	00:00:02.266	positive feedback
+robot text		00:03:48.532	00:03:50.132	00:00:01.600	put down
+robot text		00:03:52.666	00:03:55.199	00:00:02.533	positive feedback
+robot text		00:04:02.866	00:04:04.466	00:00:01.600	other
+robot text		00:04:09.599	00:04:11.799	00:00:02.200	teach
+robot text		00:04:15.465	00:04:18.132	00:00:02.667	teach
+robot text		00:04:20.199	00:04:22.399	00:00:02.200	teach
+robot text		00:04:24.399	00:04:26.465	00:00:02.066	teach
+robot text		00:04:29.266	00:04:31.933	00:00:02.667	teach
+robot text		00:04:39.399	00:04:41.599	00:00:02.200	pick up
+robot text		00:04:44.932	00:04:47.265	00:00:02.333	positive feedback
+robot text		00:04:49.399	00:04:51.865	00:00:02.466	put down
+robot text		00:04:54.333	00:04:57.533	00:00:03.200	positive feedback
+robot text		00:04:59.732	00:05:02.132	00:00:02.400	pick up
+robot text		00:05:07.732	00:05:09.732	00:00:02.000	positive feedback
+robot text		00:05:12.466	00:05:14.999	00:00:02.533	put down
+robot text		00:05:19.932	00:05:22.932	00:00:03.000	positive feedback
+robot text		00:05:24.999	00:05:27.133	00:00:02.134	pick up
+robot text		00:05:35.200	00:05:37.533	00:00:02.333	positive feedback
+robot text		00:05:39.532	00:05:41.932	00:00:02.400	put down
+start-end		00:00:06.133	00:00:06.533	00:00:00.400	start
+start-end		00:06:56.399	00:06:56.866	00:00:00.467	end
