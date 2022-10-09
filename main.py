@@ -529,7 +529,7 @@ def session_to_participant(df):
     participants = pd.unique(df_count_row_all[('participant', '')])
     new_columns = []
     for col in df.columns:
-        new_column_r = col[0] + '_' + col[1] + '_' +  'r'
+        new_column_r = col[0] + '_' + col[1] + '_' + 'r'
         new_column_t = col[0] + '_' + col[1] + '_' + 't'
         new_columns.append(new_column_r)
         new_columns.append(new_column_t)
@@ -539,14 +539,19 @@ def session_to_participant(df):
     for ind in df.index:
         participant = df[('participant', '')][ind]
         new_index = df_new.index[df_new['participants'] == participant].tolist()
+        print(new_index)
         if df[('condition','')][ind] == 'r':
             for col in df.columns:
                 new_col = col[0] + '_' + col[1] + '_' +  'r'
-                df_new[new_col][new_index[0]] = df[col][ind]
+                print(new_col)
+                print(df_new.columns.get_loc(new_col))
+                #df_new[new_col][new_index[0]] = df[col][ind]
+                df_new.iat[new_index[0], df_new.columns.get_loc(new_col)] = df[col][ind]
         elif df[('condition','')][ind] == 't':
             for col in df.columns:
                 new_col = col[0] + '_' + col[1] + '_' +  't'
-                df_new[new_col][new_index[0]] = df[col][ind]
+                #df_new[new_col][new_index[0]] = df[col][ind]
+                df_new.iat[new_index[0], df_new.columns.get_loc(new_col)] = df[col][ind]
     df_new.drop(['participant__r', 'condition__r', 'coder__r', 'participant__t', 'condition__t', 'coder__t'],
                 axis=1, inplace=True)
     return df_new
@@ -570,15 +575,19 @@ def create_zero_df(features, row_num):
 
 
 def granger_condition_tests(df, test_list):
+    df_granger_session = pd.DataFrame()
     for test in test_list:
         col1 = test[0]
         col2 = test[1]
         result = granger(df, col1, col2, maxlag=5)
+        result_str = str(result[0])+','+str(result[1])
+        df_granger_session[('granger',col1+col2)] = [result_str]
+    return df_granger_session
 
 
 
 if __name__ == '__main__':
-    from variables import count_features, granger_features, granger_tests
+    from variables import count_features, granger_features, granger_condition_list
     #parameters
     interval = 0.5 #time interval between time steps
     #which modules of analysis to run
@@ -622,19 +631,23 @@ if __name__ == '__main__':
         #transform to row
         df_count_row = df_count.stack(level=0)
         df_count_row = add_remove_features(df_count_row, count_features, file_base)
-        df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
+
         df_time_action = transform_to_time_representation(df, "action", interval)
         df_time_action.drop(['time'], axis=1, inplace = True)
         df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
         df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
         df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
         df_time = add_remove_features_granger(df_time, granger_features)
+        df_granger_session = granger_condition_tests(df_time, granger_condition_list)
+        df_count_row = pd.concat([df_count_row, df_granger_session], axis=1)
+        df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
+
         df_time = pd.concat([df_time, df_zeros], ignore_index=True)
         df_time_all = pd.concat([df_time_all, df_time], ignore_index=True)
         if condition == 'r':
             df_time_robot = pd.concat([df_time_robot, df_time], ignore_index=True)
         elif condition == 't':
-            df_time_tablet = pd.concat([df_time_robot, df_time], ignore_index=True)
+            df_time_tablet = pd.concat([df_time_tablet, df_time], ignore_index=True)
         #df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
         path_file_base = os.path.join(path,file_base)
         print(f"{path_file_base} action time rep.csv", time.time()-file_time)
@@ -652,10 +665,9 @@ if __name__ == '__main__':
             #print(f"made granger for {file_base}", time.time()-file_time)
             #time_hist = time_window_hist(all_windows_df,col_base, action_base, col_count, [action_count],path_file_base)
             #print(f"made time window for {file_base}", time.time()-file_time)
-    if run_count == 1:
-        df_count_row_all = session_to_participant(df_count_row_all)
-        df_count_row_all = add_qualtrics_data(df_count_row_all)
-        df_count_row_all.to_csv(os.path.join(path_out,"df_count_all.csv"))
+    df_count_row_all = session_to_participant(df_count_row_all)
+    df_count_row_all = add_qualtrics_data(df_count_row_all)
+    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all.csv"))
 
 
 
