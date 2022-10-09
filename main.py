@@ -54,6 +54,8 @@ def granger(df,col1,col2,maxlag=5):
             best_lag = 100
             best_pv = 100
     return([best_lag,best_pv])
+
+
 def granger_mat(df,maxlag = 5):
     '''
     col1 is row col2 is columns
@@ -63,7 +65,9 @@ def granger_mat(df,maxlag = 5):
     cols = df.columns
     mat = [[granger(df,col1,col2,maxlag) for col2 in cols] for col1 in cols]
     out_df = pd.DataFrame(mat, columns=cols, index=cols)
-    return(out_df)
+    return out_df
+
+
 def entropy(Y):
     """
     Also known as Shanon Entropy
@@ -427,7 +431,8 @@ def time_window_hist(df,col_base,action_base,col_count,action_count = 'all',save
 
 def drop_features(df):
     drop_cols = ['Joint attention:child', 'Joint attention:parent',
-                'Child gaze:child', 'Parent gaze:parent']
+                'Child gaze:child', 'Parent gaze:parent', 'Child utterance:other vocalization',
+                 'robot text:other']
     df_out = df
     for col in drop_cols:
         if col in df.columns:
@@ -548,10 +553,10 @@ def add_qualtrics_data(df_new):
 if __name__ == '__main__':
     from variables import features
     #parameters
-    interval = 1 #time interval between time steps
+    interval = 0.5 #time interval between time steps
     #which modules of analysis to run
-    run_granger = 0
-    run_count = 1
+    run_granger = 1
+    run_count = 0
 
     #load data
     files = os.listdir("files")
