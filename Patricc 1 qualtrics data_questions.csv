@@ -1,0 +1,32 @@
+,Full question,possible answers,,,,
+participant number,,,,,,
+child gender,,1,2,,,
+,,Male,Female,,,
+child whareabouts,Where does the child spend his/her days?,4,5,,,
+,,Home,Kindergarten,,,
+parent english level,,1,4,5,6,7
+,,Mother tongue,High,Medium,Low,Not at all
+SL through tablet,Is it possible to teach ESL by playing with a tablet?,1,2,3,4,5
+,,Strongly agree,Agree,Neutral,Disagree,Strongly disagree
+child television ,How frequently does your child watch movies or shows on the TV/tablet/smartphone?,1,2,3,4,5
+,,always,often,sometimes,rarely ,never
+play w others/solo,Child's preference in playing with others or alone,1,2,3,4,5
+,,always with others,usualy with others,neutral,usualy alone,always alone
+preferred color,Your child's favorite color,1,2,3,12,
+,,Red,Blue,Yellow,No preference,
+fuzzy response,What do you think your child's response would be to Fuzzy?,1,2,3,4,5
+,,Very positive,Positive,Neutral,Negative,Very negative
+blu jay response,What do you think your child's response would be to Blu Jay?,1,2,3,4,5
+,,Very positive,Positive,Neutral,Negative,Very negative
+tooty response,What do you think your child's response would be to Tooty?,1,2,3,4,5
+,,Very positive,Positive,Neutral,Negative,Very negative
+robot response,What do you think your child's response would be to Robot?,1,2,3,4,5
+,,Very positive,Positive,Neutral,Negative,Very negative
+Nars_ss1,Negative Attitudes toward Situations and Interactions with Robots,,,,,
+Nars_ss2,Negative Attitudes toward Social Influence of Robots,,,,,
+Nars_ss3,Negative Attitudes toward Emotions in Interaction with Robots,,,,,
+GS_anthropomorphism,,,,,,
+GS_animacy,,,,,,
+GS_likeability,,,,,,
+GS_intelligence,,,,,,
+GS_safety,,,,,,
