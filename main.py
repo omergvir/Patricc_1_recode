@@ -131,7 +131,8 @@ def trim_by_time(df):
     end_time = df["e_time"][df["action"] == 'start-end'].values[1]-0.001
     if end_time - s_time >= max_time:
         end_time = s_time + max_time
-    return(df[(df["s_time"] >= s_time) & (df["e_time"] <= end_time)])
+    df = df[(df["s_time"] >= s_time) & (df["e_time"] <= end_time)]
+    return df
 
 def ct_helper(df1,df2,sec,order):
     #counts if utterance at df2 started 1 sec after df1 starts or {sec} sec after it ended
@@ -363,8 +364,10 @@ def all_windows(df,s_w,e_w):
 
 def transform_to_time_representation(df,col = "action",time_stamp_jumps=1):
     #return the df in the time domain
-    end_of_vid = df["e_time"].values[-1]
-    start_of_vid = df["s_time"].values[0]
+    #end_of_vid = df["e_time"].values[-1]
+    end_of_vid = df['e_time'].max()
+    #start_of_vid = df["s_time"].values[0]
+    start_of_vid = df['s_time'].min()
     time_indicates = np.arange(start_of_vid, end_of_vid, time_stamp_jumps)
     # for each observation an array of times it appears in
     # times= pd.Series([np.arange(row["s_time"], row["e_time"], time_stamp_jumps) for index,row in df.iterrows()],
@@ -473,6 +476,17 @@ def transform_to_row(df):
     print(index)
     print(features)
 
+
+def add_remove_features_granger(df, features):
+    cols = list(df)
+    for col in cols:
+        if col not in features:
+            df = df.drop([col], axis=1)
+    for feature in features:
+        if feature not in cols:
+            df[feature] = 0
+    return df
+
 def add_remove_features(df_count_row, features, file_base):
     #removes unnecessary features
     #add features where if they are missing
@@ -546,31 +560,51 @@ def add_qualtrics_data(df_new):
     # make sure participants are in the same order in both frames - sort
     df_new = df_new.sort_values(by='participants', ignore_index=True)
     df_new = pd.concat([qualtrics, df_new], axis=1)
-
     return df_new
 
 
+def create_zero_df(features, row_num):
+    df = pd.DataFrame(columns=features,
+                      index=range(1, row_num+1)).fillna(0)
+    return df
+
+
+def granger_condition_tests(df, test_list):
+    for test in test_list:
+        col1 = test[0]
+        col2 = test[1]
+        result = granger(df, col1, col2, maxlag=5)
+
+
+
 if __name__ == '__main__':
-    from variables import features
+    from variables import count_features, granger_features, granger_tests
     #parameters
     interval = 0.5 #time interval between time steps
     #which modules of analysis to run
-    run_granger = 1
-    run_count = 0
+    run_granger = 0
+    run_count = 1
+    stitch_buffer = 10 # number of rows to buffer between stitching time series from different sessions
 
     #load data
     files = os.listdir("files")
     #set window paramaters
     col_base, action_base, col_count, action_count = "action","Child gaze","action",'all'
     df_count_row_all = pd.DataFrame()
+    df_time_all = pd.DataFrame()
+    df_time_tablet = pd.DataFrame()
+    df_time_robot = pd.DataFrame()
+    df_zeros = create_zero_df(granger_features, stitch_buffer)
     for file in files:
         output_folder = "output"
         file_time = time.time()
         print('new file = ', file_time)
         file_base = file[:-4]
+        file_split = file_base.split("_")
+        lesson_split = list(file_split[0])
+        condition = lesson_split[2]
         path = os.path.join(output_folder,file_base)
         path_out = os.path.join(output_folder)
-        #print("path out = ", path_out)
         # re creates folder
         if os.path.exists(path):
             rmtree(path)
@@ -580,41 +614,48 @@ if __name__ == '__main__':
         df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
         df = df_preprocess(df, file_base) # make a df of the raw data
 
-        if run_count == 1:
-            pd.options.display.max_columns = 10
-            #df.to_csv(os.path.join(path,f"{file_base}.csv"))
-            print(f"made csv for {file_base}")
-            pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
-            df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
-            #transform to row
-            df_count_row = df_count.stack(level=0)
-            df_count_row = add_remove_features(df_count_row, features, file_base)
-            #df_count.index.name = 'feature'
-            #df_count.reset_index(inplace=True)
-            df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
-        df_time_action = transform_to_time_representation(df,"action",interval)
-        #df_time_sub_action = transform_to_time_representation(df, "sub_action", interval)
+        #if run_count == 1:
+        pd.options.display.max_columns = 10
+        print(f"made csv for {file_base}")
+        pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
+        df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
+        #transform to row
+        df_count_row = df_count.stack(level=0)
+        df_count_row = add_remove_features(df_count_row, count_features, file_base)
+        df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
+        df_time_action = transform_to_time_representation(df, "action", interval)
+        df_time_action.drop(['time'], axis=1, inplace = True)
         df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
-        df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
+        df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
+        df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
+        df_time = add_remove_features_granger(df_time, granger_features)
+        df_time = pd.concat([df_time, df_zeros], ignore_index=True)
+        df_time_all = pd.concat([df_time_all, df_time], ignore_index=True)
+        if condition == 'r':
+            df_time_robot = pd.concat([df_time_robot, df_time], ignore_index=True)
+        elif condition == 't':
+            df_time_tablet = pd.concat([df_time_robot, df_time], ignore_index=True)
+        #df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
         path_file_base = os.path.join(path,file_base)
         print(f"{path_file_base} action time rep.csv", time.time()-file_time)
-        #df_time_action.to_csv(f"{path_file_base} action time rep.csv")
         print(f"made time representation for {file_base}", time.time()-file_time)
         #all_windows_df = all_windows(df,1,5)
         #all_windows_df.to_csv(f"{path_file_base} windows.csv")
-        if run_granger == 1:
+        #if run_granger == 1:
             #Theils_U_matrix(df_time_action).to_csv(f"{path_file_base} action_U.csv")
             #Theils_U_matrix(df_time_sub_action).to_csv(f"{path_file_base} sub_action_U.csv")
             #Theils_U_matrix(df_time_sub_action_sub_action).to_csv(f"{path_file_base} action_sub_action _U.csv")
             #print(f"made Theils_U_matrix for {file_base}")
             #granger_mat(df_time_action.drop("time",axis = 1),5).to_csv(f"{path_file_base} granger action.csv")
             #granger_mat(df_time_sub_action.drop("time",axis = 1), 5).to_csv(f"{path_file_base} granger sub_action.csv")
-            granger_mat(df_time_sub_action_sub_action.drop("time",axis = 1), 5).to_csv(f"{path_file_base} granger action_sub_action.csv")
-            print(f"made granger for {file_base}", time.time()-file_time)
+            #granger_mat(df_time_sub_action_sub_action.drop(["time"],axis = 1), 5).to_csv(f"{path_file_base} granger action_sub_action.csv")
+            #print(f"made granger for {file_base}", time.time()-file_time)
             #time_hist = time_window_hist(all_windows_df,col_base, action_base, col_count, [action_count],path_file_base)
-            print(f"made time window for {file_base}", time.time()-file_time)
-    df_count_row_all = session_to_participant(df_count_row_all)
-    df_count_row_all = add_qualtrics_data(df_count_row_all)
-    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all.csv"))
+            #print(f"made time window for {file_base}", time.time()-file_time)
+    if run_count == 1:
+        df_count_row_all = session_to_participant(df_count_row_all)
+        df_count_row_all = add_qualtrics_data(df_count_row_all)
+        df_count_row_all.to_csv(os.path.join(path_out,"df_count_all.csv"))
+
 
 

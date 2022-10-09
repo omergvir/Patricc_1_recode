@@ -1,4 +1,4 @@
-features = ['Child affect', 'Child affect:positive 1', 'Child affect:positive 2', 'Child affect:positive 3',
+count_features = ['Child affect', 'Child affect:positive 1', 'Child affect:positive 2', 'Child affect:positive 3',
             'Child affective touch:affective touch', 'Child gaze:parent', 'Child gaze:props',
             'Child gaze:robot', 'Child gesture:point at prop', 'Child prop manipulation:child',
             'Child utterance:utterance',
@@ -12,6 +12,11 @@ features = ['Child affect', 'Child affect:positive 1', 'Child affect:positive 2'
             'Parent affect', 'Parent affect:positive 1', 'Parent affect:positive 2', 'Parent affect:positive 3',
             'Parent affective touch:affective touch', 'Parent gesture:point at prop', 'Parent prop manipulation:parent',
             'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent utterance:utterance']
+
+robot_features = ['robot text:positive feedback','robot text:pick up',
+                  'robot pointing:point at prop']
+
+granger_features = count_features + robot_features
 
 granger_tests = [['Child gaze:props', 'robot pointing:point at prop'],
                  ['Parent gaze:props', 'robot pointing:point at prop'],
