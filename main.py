@@ -17,27 +17,28 @@ dir_path = os.path.dirname(sys.argv[0])
 os.chdir(dir_path)
 plt.rc('ytick', labelsize=7)
 
+
 def granger(df,col1,col2,maxlag=5):
-    c = df.columns[df.nunique() <= 1]# creates a list of cols with constant values
-    #print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
-    if col1=='Joint attention:child' and col2=='Child gaze:child':
+    c = df.columns[df.nunique() <= 1]  # creates a list of cols with constant values
+    # print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
+    if col1 == 'Joint attention:child' and col2 == 'Child gaze:child':
         print('equal = ', df[col1].equals(df[col2]))
-    if col1==col2: # dont compute granger between same cols
+    if col1 == col2:  # dont compute granger between same cols
         best_lag = 100
         best_pv = 100
     elif 'other' in col1 or 'other' in col2:
         best_lag = 100
         best_pv = 100
-    elif col1 in c: #Dont compute granger if one of the cols is constant
-        #print('no granger because constant')
+    elif col1 in c:  # Don't compute granger if one of the cols is constant
+        # print('no granger because constant')
         best_lag = 100
         best_pv = 100
-    elif col2 in c: #Dont compute granger if one of the cols is constant
-        #print('no granger because constant')
+    elif col2 in c:  # Don't compute granger if one of the cols is constant
+        #  print('no granger because constant')
         best_lag = 100
         best_pv = 100
-    elif df[col1].equals(df[col2]): #Dont copmute granger because col values are the same
-        #print('no granger because cols are equal')
+    elif df[col1].equals(df[col2]):  # Dont copmute granger because col values are the same
+        #  print('no granger because cols are equal')
         best_lag = 100
         best_pv = 100
     else:
@@ -587,9 +588,9 @@ def granger_condition_tests(df, test_list):
 
 
 if __name__ == '__main__':
-    from variables import count_features, granger_features, granger_condition_list
+    from variables import count_features, granger_features, granger_condition_list, granger_robot_tests
     #parameters
-    interval = 0.5 #time interval between time steps
+    interval = 1 #time interval between time steps
     #which modules of analysis to run
     run_granger = 0
     run_count = 1
@@ -667,7 +668,8 @@ if __name__ == '__main__':
             #print(f"made time window for {file_base}", time.time()-file_time)
     df_count_row_all = session_to_participant(df_count_row_all)
     df_count_row_all = add_qualtrics_data(df_count_row_all)
-    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all.csv"))
-
+    df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
+    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_1.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_1.csv"))
 
 
