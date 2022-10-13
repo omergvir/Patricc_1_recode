@@ -16,15 +16,33 @@ count_features = ['Child affect', 'Child affect:positive 1', 'Child affect:posit
                   'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
                   'Parent utterance:utterance']
 
-robot_vs_tablet = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG',
+robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG',
                    'Child gaze:object', 'Parent gaze:object',
-                   'Child gesture:point at prop', 'Parent gesture:point at prop',
                    'Parent affective touch:affective touch', 'Child affective touch:affective touch',
                    'Child affect', 'Parent affect',
-                   'Conversational turns',
+                   'Conversational turns','Child utterance:utterance', 'Parent utterance:utterance',
                    'Non-verbal scaffolding:cognitive', 'Non-verbal scaffolding:affective',
                    'Non-verbal scaffolding:technical',
                    'Verbal scaffolding:affective', 'Verbal scaffolding:cognitive', 'Verbal scaffolding:technical']
+
+robot_vs_tablet = ['Child gaze:parent_normalized total time_', 'Parent gaze:child_normalized total time_',
+                   'Child gaze:object_normalized total time_', 'Parent gaze:object_normalized total time_',
+                   'Parent affective touch:affective touch_normalized count_',
+                   'Child affective touch:affective touch_normalized count_',
+                   'Child affect_normalized total time_', 'Parent affect_normalized total time_',
+                   'Conversational turns_normalized total count_',
+                   'Child utterance:utterance_normalized total count',
+                   'Parent utterance:utterance_normalized total count',
+                   'Non-verbal scaffolding:cognitive_normalized total count',
+                   'Non-verbal scaffolding:affective_normalized total count',
+                   'Non-verbal scaffolding:technical_normalized total count',
+                   'Verbal scaffolding:affective_normalized total count',
+                   'Verbal scaffolding:cognitive_normalized total count',
+                   'Verbal scaffolding:technical_normalized total count',
+
+
+
+                   ]
 
 robot_features = ['robot text:positive feedback', 'robot text:pick up',
                   'robot pointing:point at prop']
