@@ -12,18 +12,9 @@ from statsmodels.tsa.stattools import grangercausalitytests
 from functools import reduce
 from shutil import rmtree
 
+a = [1,2,3,4,5]
+b = a[4:]
+print(a)
+print(b)
 
 
-
-def plus(col1, col2):
-        col3 = col1 + col2
-        return col3
-# initialize data of lists.
-data = {'Name': ['Tom', 'nick', 'krish', 'jack'],
-        'Age': [20, 21, 19, 18]}
-
-# Create DataFrame
-df = pd.DataFrame(data)
-cols = df.columns
-mat = [[plus(col1, col2) for col2 in cols] for col1 in cols]
-print(mat)

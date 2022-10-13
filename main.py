@@ -21,40 +21,26 @@ plt.rc('ytick', labelsize=7)
 def granger(df,col1,col2,maxlag=5):
     c = df.columns[df.nunique() <= 1]  # creates a list of cols with constant values
     # print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
-    if col1 == 'Joint attention:child' and col2 == 'Child gaze:child':
-        print('equal = ', df[col1].equals(df[col2]))
-    if col1 == col2:  # dont compute granger between same cols
+
+    print(["granger coloumns = ", col1, col2])
+
+
+    try:
+        x = grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
+        lags = list(range(1,maxlag+1))
+        lag_pv = np.array([x[lag][0]['ssr_chi2test'][1] for lag in lags])
+        best_pv = min(lag_pv)
+        lag_chi2v = np.array([x[lag][0]['ssr_chi2test'][0] for lag in lags])
+        best_chi2v = max(lag_chi2v)
+        best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
+    except:
         best_lag = 100
         best_pv = 100
-    elif 'other' in col1 or 'other' in col2:
-        best_lag = 100
-        best_pv = 100
-    elif col1 in c:  # Don't compute granger if one of the cols is constant
-        # print('no granger because constant')
-        best_lag = 100
-        best_pv = 100
-    elif col2 in c:  # Don't compute granger if one of the cols is constant
-        #  print('no granger because constant')
-        best_lag = 100
-        best_pv = 100
-    elif df[col1].equals(df[col2]):  # Dont copmute granger because col values are the same
-        #  print('no granger because cols are equal')
-        best_lag = 100
-        best_pv = 100
-    else:
-        #print(["granger coloumns = ", col1, col2])
-        #if col1=='Child utterance:utterance' and col2=='Child gaze:parent':
-        #    print('here')
-        try:
-            x = grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
-            lags = list(range(1,maxlag+1))
-            lag_pv = np.array([x[lag][0]['ssr_chi2test'][1] for lag in lags])
-            best_pv = min(lag_pv)
-            best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
-        except:
-            best_lag = 100
-            best_pv = 100
-    return([best_lag,best_pv])
+        best_chi2v = 100
+    print(best_chi2v)
+    # return([best_lag,best_pv])
+    return(best_chi2v)
+
 
 
 def granger_mat(df,maxlag = 5):
@@ -314,7 +300,10 @@ def make_crosstab(df,col):
     #makes a crosstab for spesific column
     time_sums = pd.crosstab(df[col],"sum",values = df["t_time"],aggfunc = 'sum') #sums time for each action
     time_counts = pd.crosstab(df[col], "count", values=df["t_time"],aggfunc='count')  # count number of events for each action
-    interaction_length = df["e_time"].values[-1]-df["s_time"].values[0]
+    end_of_vid = df['e_time'].max()
+    start_of_vid = df['s_time'].min()
+    interaction_length_1 = df["e_time"].values[-1]-df["s_time"].values[0]
+    interaction_length = end_of_vid - start_of_vid
     time_sums_normalize = time_sums/interaction_length
     time_counts_normalize = time_counts / interaction_length
     out_df = pd.concat([time_sums,time_counts,time_sums_normalize,time_counts_normalize],axis= 1)
@@ -445,6 +434,7 @@ def drop_features(df):
     df_out = df
     return df_out
 
+
 def transform_to_row(df):
     features = ['Child affect','Child affect:positive 1','Child affect:positive 2','Child affect:positive 3',
          'Child affective touch:affective touch','Child gesture','Child gaze:parent','Child gaze:props',
@@ -458,8 +448,8 @@ def transform_to_row(df):
          'Parent gaze:child','Parent gaze:props','Parent gaze:robot','Parent utterance:utterance']
     index = list(df.index)
     cols = df.shape[1]
-    print(index)
-    print(features)
+    #print(index)
+    #print(features)
     #remove rows with irrelevant features
     for label in index:
         if label not in features:
@@ -473,9 +463,6 @@ def transform_to_row(df):
             df = pd.concat([df, df_temp])
 
 
-
-    print(index)
-    print(features)
 
 
 def add_remove_features_granger(df, features):
@@ -540,12 +527,12 @@ def session_to_participant(df):
     for ind in df.index:
         participant = df[('participant', '')][ind]
         new_index = df_new.index[df_new['participants'] == participant].tolist()
-        print(new_index)
+        #print(new_index)
         if df[('condition','')][ind] == 'r':
             for col in df.columns:
                 new_col = col[0] + '_' + col[1] + '_' +  'r'
-                print(new_col)
-                print(df_new.columns.get_loc(new_col))
+                #print(new_col)
+                #print(df_new.columns.get_loc(new_col))
                 #df_new[new_col][new_index[0]] = df[col][ind]
                 df_new.iat[new_index[0], df_new.columns.get_loc(new_col)] = df[col][ind]
         elif df[('condition','')][ind] == 't':
@@ -581,16 +568,25 @@ def granger_condition_tests(df, test_list):
         col1 = test[0]
         col2 = test[1]
         result = granger(df, col1, col2, maxlag=5)
-        result_str = str(result[0])+','+str(result[1])
+        #result_str = str(result[0])+','+str(result[1])
+
         df_granger_session[('granger',col1+col2)] = [result_str]
     return df_granger_session
 
 
+def add_derived_features(df):
+    variations = ['_count_', '_total time_', '_normalized count_', '_normalized total time_']
+    for variation in variations:
+        df['Parent gaze:object'+variation+'t'] = df['Parent gaze:tablet'+variation+'t']
+        df['Parent gaze:object'+variation+'r'] = df['Parent gaze:robot'+variation+'r']+df['Parent gaze:props'+variation+'r']
+        df['Child gaze:object'+variation+'t'] = df['Child gaze:tablet'+variation+'t']
+        df['Child gaze:object'+variation+'r'] = df['Child gaze:robot'+variation+'r']+df['Child gaze:props'+variation+'r']
+    return df
 
 if __name__ == '__main__':
     from variables import count_features, granger_features, granger_condition_list, granger_robot_tests
     #parameters
-    interval = 1 #time interval between time steps
+    interval = 0.5 #time interval between time steps
     #which modules of analysis to run
     run_granger = 0
     run_count = 1
@@ -615,6 +611,7 @@ if __name__ == '__main__':
         condition = lesson_split[2]
         path = os.path.join(output_folder,file_base)
         path_out = os.path.join(output_folder)
+        print(path_out)
         # re creates folder
         if os.path.exists(path):
             rmtree(path)
@@ -666,10 +663,12 @@ if __name__ == '__main__':
             #print(f"made granger for {file_base}", time.time()-file_time)
             #time_hist = time_window_hist(all_windows_df,col_base, action_base, col_count, [action_count],path_file_base)
             #print(f"made time window for {file_base}", time.time()-file_time)
+    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session.csv"))
     df_count_row_all = session_to_participant(df_count_row_all)
+    df_count_row_all = add_derived_features(df_count_row_all)
     df_count_row_all = add_qualtrics_data(df_count_row_all)
     df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
-    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_1.csv"))
-    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_1.csv"))
+    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
 
 
