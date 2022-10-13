@@ -21,10 +21,7 @@ plt.rc('ytick', labelsize=7)
 def granger(df,col1,col2,maxlag=5):
     c = df.columns[df.nunique() <= 1]  # creates a list of cols with constant values
     # print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
-
     print(["granger coloumns = ", col1, col2])
-
-
     try:
         x = grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
         lags = list(range(1,maxlag+1))
@@ -33,10 +30,11 @@ def granger(df,col1,col2,maxlag=5):
         lag_chi2v = np.array([x[lag][0]['ssr_chi2test'][0] for lag in lags])
         best_chi2v = max(lag_chi2v)
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
-    except:
+    except Exception as e:
         best_lag = 100
         best_pv = 100
-        best_chi2v = 100
+        best_chi2v = 0
+        print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
     return(best_chi2v)
@@ -570,7 +568,7 @@ def granger_condition_tests(df, test_list):
         result = granger(df, col1, col2, maxlag=5)
         #result_str = str(result[0])+','+str(result[1])
 
-        df_granger_session[('granger',col1+col2)] = [result_str]
+        df_granger_session[('granger',col1+col2)] = [result] #[result]
     return df_granger_session
 
 
@@ -582,6 +580,19 @@ def add_derived_features(df):
         df['Child gaze:object'+variation+'t'] = df['Child gaze:tablet'+variation+'t']
         df['Child gaze:object'+variation+'r'] = df['Child gaze:robot'+variation+'r']+df['Child gaze:props'+variation+'r']
     return df
+
+
+def add_object_features(df):
+    df['Child gaze:object'] = 0
+    df['Parent gaze:object'] = 0
+
+    df['Child gaze:object'] = df['Child gaze:tablet']+df['Child gaze:robot']+df['Child gaze:props']
+    df.loc[df['Child gaze:object'] > 1, 'Child gaze:object'] = 1
+
+    df['Parent gaze:object'] = df['Parent gaze:tablet']+df['Parent gaze:robot']+df['Parent gaze:props']
+    df.loc[df['Parent gaze:object'] > 1, 'Parent gaze:object'] = 1
+    return df
+
 
 if __name__ == '__main__':
     from variables import count_features, granger_features, granger_condition_list, granger_robot_tests
@@ -636,6 +647,7 @@ if __name__ == '__main__':
         df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
         df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
         df_time = add_remove_features_granger(df_time, granger_features)
+        df_time = add_object_features(df_time)
         df_granger_session = granger_condition_tests(df_time, granger_condition_list)
         df_count_row = pd.concat([df_count_row, df_granger_session], axis=1)
         df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
