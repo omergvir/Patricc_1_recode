@@ -30,6 +30,9 @@ def granger(df,col1,col2,maxlag=5):
         lag_chi2v = np.array([x[lag][0]['ssr_chi2test'][0] for lag in lags])
         best_chi2v = max(lag_chi2v)
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
+        #if best_pv > 0.05:
+        #    best_chi2v = 'ns'
+
     except Exception as e:
         best_lag = 100
         best_pv = 100
@@ -554,6 +557,21 @@ def add_qualtrics_data(df_new):
     return df_new
 
 
+def add_qualtrics_data_1(df_new):
+    # read qualtrics to df
+    qualtrics = pd.read_csv('Patricc 1 qualtrics data_minimal.csv')
+    df_new['child gender'] = 0
+    for ind in df_new.index:
+        print(ind)
+        participant = df_new._get_value(ind, 'participant')
+        ind_participant = int(participant) - 100 - 1
+        gender = qualtrics._get_value(ind_participant, 'child gender')
+        df_new._set_value(ind, 'child gender', gender)
+        #df_new.at[ind, 'child gender'] = gender
+
+    #df_new = pd.concat([qualtrics, df_new], axis=1)
+    return df_new
+
 def create_zero_df(features, row_num):
     df = pd.DataFrame(columns=features,
                       index=range(1, row_num+1)).fillna(0)
@@ -561,14 +579,15 @@ def create_zero_df(features, row_num):
 
 
 def granger_condition_tests(df, test_list):
+    lag = 10
     df_granger_session = pd.DataFrame()
     for test in test_list:
         col1 = test[0]
         col2 = test[1]
-        result = granger(df, col1, col2, maxlag=5)
+        result = granger(df, col1, col2, maxlag=lag)
         #result_str = str(result[0])+','+str(result[1])
 
-        df_granger_session[('granger',col1+col2)] = [result] #[result]
+        df_granger_session[('granger_'+col1+'_'+col2)] = [result] #[result]
     return df_granger_session
 
 
@@ -582,7 +601,7 @@ def add_derived_features(df):
     return df
 
 
-def add_object_features(df):
+def add_object_features_time(df):
     df['Child gaze:object'] = 0
     df['Parent gaze:object'] = 0
 
@@ -594,8 +613,47 @@ def add_object_features(df):
     return df
 
 
+def convert_labels(df):
+    cols = list(df)
+    new_cols = []
+    for col in cols:
+        new_col = col[0] + '_' + col[1]
+        new_cols.append(new_col)
+    df.columns = new_cols
+    return df
+
+
+def add_object_features_row(df):
+    df['Child gaze:object_normalized total time'] = 0
+    df['Parent gaze:object_normalized total time'] = 0
+
+    df['Child gaze:object_normalized total time'] = df['Child gaze:tablet_normalized total time']+\
+                              df['Child gaze:robot_normalized total time']+df['Child gaze:props_normalized total time']
+    df.loc[df['Child gaze:object_normalized total time'] > 1, 'Child gaze:object_normalized total time'] = 1
+
+    df['Parent gaze:object_normalized total time'] = df['Parent gaze:tablet_normalized total time']+\
+                                                     df['Parent gaze:robot_normalized total time']+\
+                                                     df['Parent gaze:props_normalized total time']
+    df.loc[df['Parent gaze:object_normalized total time'] > 1, 'Parent gaze:object_normalized total time'] = 1
+    return df
+
+
+def remove_count_features(df, features):
+    condition = df._get_value(0, 'condition_')
+    participant = df._get_value(0, 'participant_')
+    order = df._get_value(0, 'order_')
+    cols = list(df)
+    for col in cols:
+        if col not in features:
+            df = df.drop([col], axis=1)
+    df['condition'] = condition
+    df['participant'] = participant
+    df['order'] = order
+    return df
+
+
 if __name__ == '__main__':
-    from variables import count_features, granger_features, granger_condition_list, granger_robot_tests
+    from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, robot_vs_tablet
     #parameters
     interval = 0.5 #time interval between time steps
     #which modules of analysis to run
@@ -608,6 +666,7 @@ if __name__ == '__main__':
     #set window paramaters
     col_base, action_base, col_count, action_count = "action","Child gaze","action",'all'
     df_count_row_all = pd.DataFrame()
+    df_granger_robot = pd.DataFrame()
     df_time_all = pd.DataFrame()
     df_time_tablet = pd.DataFrame()
     df_time_robot = pd.DataFrame()
@@ -640,6 +699,9 @@ if __name__ == '__main__':
         #transform to row
         df_count_row = df_count.stack(level=0)
         df_count_row = add_remove_features(df_count_row, count_features, file_base)
+        df_count_row = convert_labels(df_count_row)
+        df_count_row = add_object_features_row(df_count_row)
+        df_count_row = remove_count_features(df_count_row, robot_vs_tablet)
 
         df_time_action = transform_to_time_representation(df, "action", interval)
         df_time_action.drop(['time'], axis=1, inplace = True)
@@ -647,9 +709,13 @@ if __name__ == '__main__':
         df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
         df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
         df_time = add_remove_features_granger(df_time, granger_features)
-        df_time = add_object_features(df_time)
+        df_time = add_object_features_time(df_time)
+        if condition == 'r':
+            df_granger_session_robot = granger_condition_tests(df_time, granger_robot_tests)
+            df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)
         df_granger_session = granger_condition_tests(df_time, granger_condition_list)
-        df_count_row = pd.concat([df_count_row, df_granger_session], axis=1)
+
+        df_count_row = pd.concat([df_granger_session, df_count_row], axis=1)
         df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
 
         df_time = pd.concat([df_time, df_zeros], ignore_index=True)
@@ -664,12 +730,15 @@ if __name__ == '__main__':
         print(f"made time representation for {file_base}", time.time()-file_time)
         #all_windows_df = all_windows(df,1,5)
         #all_windows_df.to_csv(f"{path_file_base} windows.csv")
-    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session.csv"))
-    df_count_row_all = session_to_participant(df_count_row_all)
-    df_count_row_all = add_derived_features(df_count_row_all)
-    df_count_row_all = add_qualtrics_data(df_count_row_all)
-    df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
-    df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
-    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
+    #df_count_row_all = add_object_features_row(df_count_row_all)
+    #df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_1.csv"))
+    #df_count_row_all = session_to_participant(df_count_row_all)
+    #df_count_row_all = add_derived_features(df_count_row_all)
+    df_count_row_all = add_qualtrics_data_1(df_count_row_all)
+    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10_.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10_.csv"))
+    #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
+    #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
+    #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
 
 
