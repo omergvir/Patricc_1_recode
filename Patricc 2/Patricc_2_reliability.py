@@ -14,6 +14,7 @@ for col in columns:
     print(col)
     icc = pg.intraclass_corr(data=df, targets='exam', raters='Coder name', ratings=col)
     icc.set_index('Type')
+    print(icc)
 
 
 

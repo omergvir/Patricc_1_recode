@@ -560,13 +560,29 @@ def add_qualtrics_data(df_new):
 def add_qualtrics_data_1(df_new):
     # read qualtrics to df
     qualtrics = pd.read_csv('Patricc 1 qualtrics data_minimal.csv')
-    df_new['child gender'] = 0
-    for ind in df_new.index:
-        print(ind)
-        participant = df_new._get_value(ind, 'participant')
-        ind_participant = int(participant) - 100 - 1
-        gender = qualtrics._get_value(ind_participant, 'child gender')
-        df_new._set_value(ind, 'child gender', gender)
+    new_cols = ['child gender', 'child age', 'Nars_ss1', 'Nars_ss2', 'Nars_ss3']
+
+    for col in new_cols:
+        df_new[col] = 0
+        for ind in df_new.index:
+            print(ind)
+            participant = df_new._get_value(ind, 'participant')
+            ind_participant = int(participant) - 100 - 1
+            val = qualtrics._get_value(ind_participant, col)
+            df_new._set_value(ind, col, val)
+
+
+    #df_new['child gender'] = 0
+    #df_new['child age'] = 0
+    #df_new['Nars_ss1'] = 0
+    #for ind in df_new.index:
+    #    print(ind)
+    #    participant = df_new._get_value(ind, 'participant')
+    #    ind_participant = int(participant) - 100 - 1
+    #    gender = qualtrics._get_value(ind_participant, 'child gender')
+    #    age = qualtrics._get_value(ind_participant, 'child age')
+    #    df_new._set_value(ind, 'child gender', gender)
+    #    df_new._set_value(ind, 'child age', gender)
         #df_new.at[ind, 'child gender'] = gender
 
     #df_new = pd.concat([qualtrics, df_new], axis=1)
@@ -653,7 +669,8 @@ def remove_count_features(df, features):
 
 
 if __name__ == '__main__':
-    from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, robot_vs_tablet
+    from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, \
+        robot_vs_tablet, time_series_features
     #parameters
     interval = 0.5 #time interval between time steps
     #which modules of analysis to run
@@ -673,6 +690,7 @@ if __name__ == '__main__':
     df_zeros = create_zero_df(granger_features, stitch_buffer)
     for file in files:
         output_folder = "output"
+        output_folder_2 = "send_goren"
         file_time = time.time()
         print('new file = ', file_time)
         file_base = file[:-4]
@@ -681,6 +699,7 @@ if __name__ == '__main__':
         condition = lesson_split[2]
         path = os.path.join(output_folder,file_base)
         path_out = os.path.join(output_folder)
+        path_out_2 = os.path.join(output_folder_2)
         print(path_out)
         # re creates folder
         if os.path.exists(path):
@@ -709,7 +728,10 @@ if __name__ == '__main__':
         df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
         df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
         df_time = add_remove_features_granger(df_time, granger_features)
+        #df_time = add_remove_features_granger(df_time, time_series_features)
         df_time = add_object_features_time(df_time)
+        df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
+        print('made csv')
         if condition == 'r':
             df_granger_session_robot = granger_condition_tests(df_time, granger_robot_tests)
             df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)

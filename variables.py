@@ -43,6 +43,7 @@ robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG
 
 robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child_normalized total time',
                    'Child gaze:object_normalized total time', 'Parent gaze:object_normalized total time',
+                   'Mutual gaze:MG',
                    'Parent affective touch:affective touch_normalized count',
                    'Child affective touch:affective touch_normalized count',
                    'Child affect_normalized total time', 'Parent affect_normalized total time',
