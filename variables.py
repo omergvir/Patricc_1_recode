@@ -43,7 +43,7 @@ robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG
 
 robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child_normalized total time',
                    'Child gaze:object_normalized total time', 'Parent gaze:object_normalized total time',
-                   'Mutual gaze:MG',
+                   'Mutual gaze:MG_normalized total time',
                    'Parent affective touch:affective touch_normalized count',
                    'Child affective touch:affective touch_normalized count',
                    'Child affect_normalized total time', 'Parent affect_normalized total time',
@@ -55,7 +55,7 @@ robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child
                    'Non-verbal scaffolding:technical_normalized count',
                    'Verbal scaffolding:affective_normalized count',
                    'Verbal scaffolding:cognitive_normalized count',
-                   'Verbal scaffolding:technical_normalized count', 'Mutual gaze:MG']
+                   'Verbal scaffolding:technical_normalized count']
 
 robot_features = ['robot text:positive feedback', 'robot text:pick up',
                   'robot pointing:point at prop']
@@ -76,7 +76,12 @@ granger_condition_list = [['Non-verbal scaffolding:affective', 'robot text:posit
                           ['Non-verbal scaffolding:cognitive', 'robot text:pick up'],
                           ['Verbal scaffolding:cognitive', 'robot text:pick up'],
                           ['Parent prop manipulation:parent', 'robot text:pick up'],
-                          ['Child prop manipulation:child', 'robot text:pick up']]
+                          ['Child prop manipulation:child', 'robot text:pick up'],
+                          ['Child affect', 'Verbal scaffolding:affective'],
+                          ['Child utterance:utterance', 'Parent utterance:utterance'],
+                          ['Parent utterance:utterance', 'child utterance:utterance'],
+                          ['Child gaze:parent', 'Parent gaze:child'],
+                          ['Parent gaze:child', 'Child gaze:parent']]
 
 granger_robot_tests = [['Child gaze:props', 'robot pointing:point at prop'],
                        ['Parent gaze:props', 'robot pointing:point at prop'],

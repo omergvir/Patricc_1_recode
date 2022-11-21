@@ -29,18 +29,20 @@ def granger(df,col1,col2,maxlag=5):
         best_pv = min(lag_pv)
         lag_chi2v = np.array([x[lag][0]['ssr_chi2test'][0] for lag in lags])
         best_chi2v = max(lag_chi2v)
+        max_index = lag_chi2v.argmax(axis=0)
+        best_pv = lag_pv[max_index]
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
         #if best_pv > 0.05:
         #    best_chi2v = 'ns'
 
     except Exception as e:
         best_lag = 100
-        best_pv = 100
+        best_pv = 1
         best_chi2v = 0
         print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
-    return(best_chi2v)
+    return(best_chi2v, best_pv)
 
 
 
@@ -596,15 +598,17 @@ def create_zero_df(features, row_num):
 
 def granger_condition_tests(df, test_list):
     lag = 10
+    df_pf = pd.DataFrame(columns=['p', 'f'])
     df_granger_session = pd.DataFrame()
     for test in test_list:
         col1 = test[0]
         col2 = test[1]
-        result = granger(df, col1, col2, maxlag=lag)
+        result, p = granger(df, col1, col2, maxlag=lag)
+        df_pf.loc[len(df_pf.index)] = [p, result]
         #result_str = str(result[0])+','+str(result[1])
 
         df_granger_session[('granger_'+col1+'_'+col2)] = [result] #[result]
-    return df_granger_session
+    return df_granger_session, df_pf
 
 
 def add_derived_features(df):
@@ -687,6 +691,8 @@ if __name__ == '__main__':
     df_time_all = pd.DataFrame()
     df_time_tablet = pd.DataFrame()
     df_time_robot = pd.DataFrame()
+    df_pf_robot = pd.DataFrame()
+    df_pf_vs = pd.DataFrame()
     df_zeros = create_zero_df(granger_features, stitch_buffer)
     for file in files:
         output_folder = "output"
@@ -733,10 +739,11 @@ if __name__ == '__main__':
         df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
         print('made csv')
         if condition == 'r':
-            df_granger_session_robot = granger_condition_tests(df_time, granger_robot_tests)
+            df_granger_session_robot, df_pf = granger_condition_tests(df_time, granger_robot_tests)
             df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)
-        df_granger_session = granger_condition_tests(df_time, granger_condition_list)
-
+            df_pf_robot = pd.concat([df_pf_robot, df_pf], ignore_index=True)
+        df_granger_session, df_pf = granger_condition_tests(df_time, granger_condition_list)
+        df_pf_vs = pd.concat([df_pf_vs, df_pf], ignore_index=True)
         df_count_row = pd.concat([df_granger_session, df_count_row], axis=1)
         df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
 
@@ -757,8 +764,13 @@ if __name__ == '__main__':
     #df_count_row_all = session_to_participant(df_count_row_all)
     #df_count_row_all = add_derived_features(df_count_row_all)
     df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10_.csv"))
-    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10_.csv"))
+    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10.csv"))
+    df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
+    df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
+    df_pf_robot.plot(x='f', y='p', style='o')
+    df_pf_vs.plot(x='f', y='p', style='o')
+    plt.show()
     #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
     #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
     #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
