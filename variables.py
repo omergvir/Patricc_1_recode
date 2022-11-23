@@ -48,6 +48,7 @@ robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child
                    'Child affective touch:affective touch_normalized count',
                    'Child affect_normalized total time', 'Parent affect_normalized total time',
                    'Conversational turns_normalized count',
+                   'Conversational turns:PCP_normalized count','Conversational turns:CPC_normalized count',
                    'Child utterance:utterance_normalized count',
                    'Parent utterance:utterance_normalized count',
                    'Non-verbal scaffolding:cognitive_normalized count',
@@ -55,7 +56,8 @@ robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child
                    'Non-verbal scaffolding:technical_normalized count',
                    'Verbal scaffolding:affective_normalized count',
                    'Verbal scaffolding:cognitive_normalized count',
-                   'Verbal scaffolding:technical_normalized count']
+                   'Verbal scaffolding:technical_normalized count',
+                   'Child prop manipulation:child_normalized count', 'Parent prop manipulation:parent_normalized count']
 
 robot_features = ['robot text:positive feedback', 'robot text:pick up',
                   'robot pointing:point at prop']
@@ -78,10 +80,14 @@ granger_condition_list = [['Non-verbal scaffolding:affective', 'robot text:posit
                           ['Parent prop manipulation:parent', 'robot text:pick up'],
                           ['Child prop manipulation:child', 'robot text:pick up'],
                           ['Child affect', 'Verbal scaffolding:affective'],
+                          ['Child affect', 'Non-verbal scaffolding:affective'],
                           ['Child utterance:utterance', 'Parent utterance:utterance'],
-                          ['Parent utterance:utterance', 'child utterance:utterance'],
+                          ['Parent utterance:utterance', 'Child utterance:utterance'],
                           ['Child gaze:parent', 'Parent gaze:child'],
-                          ['Parent gaze:child', 'Child gaze:parent']]
+                          ['Parent gaze:child', 'Child gaze:parent'],
+                          ['Mutual gaze:MG', 'Parent gaze:child'],
+                          ['Mutual gaze:MG', 'Child gaze:parent'],
+                          ['Child affect', 'Parent affective touch:affective touch']]
 
 granger_robot_tests = [['Child gaze:props', 'robot pointing:point at prop'],
                        ['Parent gaze:props', 'robot pointing:point at prop'],
@@ -94,6 +100,8 @@ granger_robot_tests = [['Child gaze:props', 'robot pointing:point at prop'],
                        ['Mutual gaze:MG', 'robot text:pick up'],
                        ['Child gaze:robot', 'robot text:pick up'],
                        ['Parent gaze:robot', 'robot text:pick up'],
+                       ['Child gaze:props', 'robot text:pick up'],
+                       ['Parent gaze:props', 'robot text:pick up'],
                        ['Parent utterance:utterance', 'robot text:pick up'],
                        ['Child utterance:utterance', 'robot text:pick up'],
                        ['Conversational turns', 'robot text:pick up'],
@@ -102,7 +110,14 @@ granger_robot_tests = [['Child gaze:props', 'robot pointing:point at prop'],
                        ['Parent prop manipulation:parent', 'robot text:pick up'],
                        ['Child prop manipulation:child', 'robot text:pick up'],
                        ['Parent gesture:point at prop', 'robot text:pick up'],
-                       ['Child gesture:point at prop', 'robot text:pick up']]
+                       ['Child gesture:point at prop', 'robot text:pick up'],
+                       ['Child affect', 'Verbal scaffolding:affective'],
+                       ['Child utterance:utterance', 'Parent utterance:utterance'],
+                       ['Parent utterance:utterance', 'Child utterance:utterance'],
+                       ['Child gaze:parent', 'Parent gaze:child'],
+                       ['Parent gaze:child', 'Child gaze:parent'],
+                       ['Child gaze:props', 'Parent gesture:point at prop'],
+                       ['Parent gaze:props', 'Child gesture:point at prop']]
 
 
 additional_features = ['Conversational turns', 'Conversational turns:CP', 'Conversational turns:CPC',

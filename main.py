@@ -31,14 +31,15 @@ def granger(df,col1,col2,maxlag=5):
         best_chi2v = max(lag_chi2v)
         max_index = lag_chi2v.argmax(axis=0)
         best_pv = lag_pv[max_index]
+        y = grangercausalitytests(df[[col1, col2]].dropna(),maxlag=maxlag,verbose=False)
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
         #if best_pv > 0.05:
         #    best_chi2v = 'ns'
 
     except Exception as e:
         best_lag = 100
-        best_pv = 1
-        best_chi2v = 0
+        best_pv = 'NA'
+        best_chi2v = 'NA'
         print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
@@ -678,7 +679,7 @@ if __name__ == '__main__':
     #parameters
     interval = 0.5 #time interval between time steps
     #which modules of analysis to run
-    run_granger = 0
+    run_granger = 1
     run_count = 1
     stitch_buffer = 10 # number of rows to buffer between stitching time series from different sessions
 
@@ -757,20 +758,22 @@ if __name__ == '__main__':
         path_file_base = os.path.join(path,file_base)
         print(f"{path_file_base} action time rep.csv", time.time()-file_time)
         print(f"made time representation for {file_base}", time.time()-file_time)
-        #all_windows_df = all_windows(df,1,5)
+        #all_windows_df = all_windows(df,10,20)
         #all_windows_df.to_csv(f"{path_file_base} windows.csv")
     #df_count_row_all = add_object_features_row(df_count_row_all)
     #df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_1.csv"))
     #df_count_row_all = session_to_participant(df_count_row_all)
     #df_count_row_all = add_derived_features(df_count_row_all)
     df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10.csv"))
-    df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10.csv"))
-    df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
-    df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
-    df_pf_robot.plot(x='f', y='p', style='o')
-    df_pf_vs.plot(x='f', y='p', style='o')
-    plt.show()
+
+    ##df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10_int05.csv"))
+    ##df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10_int05_extended.csv"))
+
+    #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
+    #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
+    #df_pf_robot.plot(x='f', y='p', style='o')
+    #df_pf_vs.plot(x='f', y='p', style='o')
+    #plt.show()
     #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
     #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
     #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
