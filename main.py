@@ -38,18 +38,19 @@ def granger(df,col1,col2,maxlag=5):
         best_chi2v = lag_chi2v[best_index]
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
         if best_pv < 0.05:
-            best_chi2v = 1
+            sig = 1
         else:
-            best_chi2v = 0
+            sig = 0
 
     except Exception as e:
         best_lag = 100
         best_pv = math.nan
         best_chi2v = math.nan
+        sig = math.nan
         print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
-    return(best_chi2v, best_pv)
+    return(best_chi2v, best_pv, sig)
 
 
 
@@ -593,11 +594,12 @@ def granger_condition_tests(df, test_list):
     for test in test_list:
         col1 = test[0]
         col2 = test[1]
-        result, p = granger(df, col1, col2, maxlag=lag)
+        result, p, sig = granger(df, col1, col2, maxlag=lag)
         df_pf.loc[len(df_pf.index)] = [p, result]
         #result_str = str(result[0])+','+str(result[1])
 
         df_granger_session[('granger_'+col1+'_'+col2)] = [result] #[result]
+        df_granger_session[('granger_'+col1+'_'+col2+'_sig')] = [sig] #[result]
     return df_granger_session, df_pf
 
 
