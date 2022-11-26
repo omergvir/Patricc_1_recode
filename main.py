@@ -5,6 +5,7 @@ import numpy as np
 import seaborn as sns
 import warnings
 import time
+import math
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 from scipy.stats import chi2_contingency
@@ -23,23 +24,28 @@ def granger(df,col1,col2,maxlag=5):
     # print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
     print(["granger coloumns = ", col1, col2])
     try:
-        x = grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
+        x_w_diff= grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
+        x = grangercausalitytests(df[[col1, col2]].dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
+
         lags = list(range(1,maxlag+1))
         lag_pv = np.array([x[lag][0]['ssr_chi2test'][1] for lag in lags])
         best_pv = min(lag_pv)
         lag_chi2v = np.array([x[lag][0]['ssr_chi2test'][0] for lag in lags])
         best_chi2v = max(lag_chi2v)
-        max_index = lag_chi2v.argmax(axis=0)
-        best_pv = lag_pv[max_index]
-        y = grangercausalitytests(df[[col1, col2]].dropna(),maxlag=maxlag,verbose=False)
+        #max_index = lag_chi2v.argmax(axis=0)
+        best_index = lag_pv.argmin(axis=0)
+        #best_pv = lag_pv[max_index]
+        best_chi2v = lag_chi2v[best_index]
         best_lag = np.array(lags)[lag_pv == best_pv] if len(lag_pv == best_pv) == 1 else np.array(lags)[lag_pv == best_pv][0]
-        #if best_pv > 0.05:
-        #    best_chi2v = 'ns'
+        if best_pv < 0.05:
+            best_chi2v = 1
+        else:
+            best_chi2v = 0
 
     except Exception as e:
         best_lag = 100
-        best_pv = 'NA'
-        best_chi2v = 'NA'
+        best_pv = math.nan
+        best_chi2v = math.nan
         print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
@@ -246,6 +252,8 @@ def df_preprocess(df, file_base):
     file_split = file_base.split("_")
     lesson_split = list(file_split[0])
     order = lesson_split[1]
+    if order == '3':
+        order = '2'
     condition = lesson_split[2]
     participant = file_split[1]
     coder = file_split[2]
@@ -518,34 +526,15 @@ def add_remove_features(df_count_row, features, file_base):
 
 def session_to_participant(df):
     #converts row-session df to row-participant df
-    participants = pd.unique(df_count_row_all[('participant', '')])
-    new_columns = []
-    for col in df.columns:
-        new_column_r = col[0] + '_' + col[1] + '_' + 'r'
-        new_column_t = col[0] + '_' + col[1] + '_' + 't'
-        new_columns.append(new_column_r)
-        new_columns.append(new_column_t)
-        #print(new_column_r, new_column_t)
-    df_new = pd.DataFrame(columns=new_columns)
-    df_new['participants'] = participants
-    for ind in df.index:
-        participant = df[('participant', '')][ind]
-        new_index = df_new.index[df_new['participants'] == participant].tolist()
-        #print(new_index)
-        if df[('condition','')][ind] == 'r':
-            for col in df.columns:
-                new_col = col[0] + '_' + col[1] + '_' +  'r'
-                #print(new_col)
-                #print(df_new.columns.get_loc(new_col))
-                #df_new[new_col][new_index[0]] = df[col][ind]
-                df_new.iat[new_index[0], df_new.columns.get_loc(new_col)] = df[col][ind]
-        elif df[('condition','')][ind] == 't':
-            for col in df.columns:
-                new_col = col[0] + '_' + col[1] + '_' +  't'
-                #df_new[new_col][new_index[0]] = df[col][ind]
-                df_new.iat[new_index[0], df_new.columns.get_loc(new_col)] = df[col][ind]
-    df_new.drop(['participant__r', 'condition__r', 'coder__r', 'participant__t', 'condition__t', 'coder__t'],
-                axis=1, inplace=True)
+    df_robot = df[df['condition'] == 'r']
+    df_robot = df_robot.sort_values(by = 'participant')
+    df_robot = df_robot.add_suffix('_r')
+    df_robot = df_robot.reset_index(drop=True)
+    df_tablet = df[df['condition'] == 't']
+    df_tablet = df_tablet.sort_values(by = 'participant')
+    df_tablet = df_tablet.add_suffix('_t')
+    df_tablet = df_tablet.reset_index(drop=True)
+    df_new = pd.concat([df_robot, df_tablet], axis=1)
     return df_new
 
 
@@ -598,7 +587,7 @@ def create_zero_df(features, row_num):
 
 
 def granger_condition_tests(df, test_list):
-    lag = 10
+    lag = 5
     df_pf = pd.DataFrame(columns=['p', 'f'])
     df_granger_session = pd.DataFrame()
     for test in test_list:
@@ -663,6 +652,8 @@ def remove_count_features(df, features):
     condition = df._get_value(0, 'condition_')
     participant = df._get_value(0, 'participant_')
     order = df._get_value(0, 'order_')
+    if order == '3':
+        order = '2'
     cols = list(df)
     for col in cols:
         if col not in features:
@@ -681,7 +672,7 @@ if __name__ == '__main__':
     #which modules of analysis to run
     run_granger = 1
     run_count = 1
-    stitch_buffer = 10 # number of rows to buffer between stitching time series from different sessions
+    stitch_buffer = 30 # number of rows to buffer between stitching time series from different sessions
 
     #load data
     files = os.listdir("files")
@@ -735,7 +726,6 @@ if __name__ == '__main__':
         df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
         df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
         df_time = add_remove_features_granger(df_time, granger_features)
-        #df_time = add_remove_features_granger(df_time, time_series_features)
         df_time = add_object_features_time(df_time)
         df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
         print('made csv')
@@ -765,9 +755,10 @@ if __name__ == '__main__':
     #df_count_row_all = session_to_participant(df_count_row_all)
     #df_count_row_all = add_derived_features(df_count_row_all)
     df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-
-    ##df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag10_int05.csv"))
-    ##df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_session_lag10_int05_extended.csv"))
+    df_by_participant = session_to_participant(df_count_row_all)
+    df_by_participant.to_csv(os.path.join(path_out, "df_by_participant_lag30_int03_no_diff.csv"))
+    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag30_int03_no_diff.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "df_robot_session_lag30_int03_no_diff.csv"))
 
     #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
     #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
