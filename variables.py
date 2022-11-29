@@ -12,7 +12,7 @@ count_features_old = ['Child affect', 'Child affect:positive 1', 'Child affect:p
                   'Verbal scaffolding:technical',
                   'Parent affect', 'Parent affect:positive 1', 'Parent affect:positive 2', 'Parent affect:positive 3',
                   'Parent affective touch:affective touch', 'Parent gesture:point at prop',
-                  'Parent prop manipulation:parent',
+                  'Parent prop manipulation:parent','Parent gesture:point at prop', 'Child gesture:point at prop',
                   'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
                   'Parent utterance:utterance']
 
@@ -28,7 +28,7 @@ count_features = ['Child affect',
                   'Verbal scaffolding:technical',
                   'Parent affect',
                   'Parent affective touch:affective touch',
-                  'Parent prop manipulation:parent',
+                  'Parent prop manipulation:parent','Parent gesture:point at prop', 'Child gesture:point at prop',
                   'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
                   'Parent utterance:utterance']
 
@@ -43,7 +43,10 @@ robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG
 
 robot_vs_tablet = ['Child gaze:parent_normalized total time', 'Parent gaze:child_normalized total time',
                    'Child gaze:object_normalized total time', 'Parent gaze:object_normalized total time',
+                   'Parent gesture:point at prop_normalized count',
+                   'Child gesture:point at prop_normalized count',
                    'Mutual gaze:MG_normalized total time',
+                   'Mutual gaze:MG_normalized count',
                    'Parent affective touch:affective touch_normalized count',
                    'Child affective touch:affective touch_normalized count',
                    'Child affect_normalized total time', 'Parent affect_normalized total time',
@@ -64,7 +67,9 @@ robot_features = ['robot text:positive feedback', 'robot text:pick up',
 
 granger_features = count_features + robot_features
 
-granger_condition_list = [['Non-verbal scaffolding:affective', 'robot text:positive feedback'],
+granger_condition_list = [['robot text:positive feedback', 'Child prop manipulation:child'],
+                          ['robot text:pick up', 'Child prop manipulation:child'],
+                          ['Non-verbal scaffolding:affective', 'robot text:positive feedback'],
                           ['Verbal scaffolding:affective', 'robot text:positive feedback'],
                           ['Parent affective touch:affective touch', 'robot text:positive feedback'],
                           ['Parent affect', 'robot text:positive feedback'],
@@ -89,7 +94,9 @@ granger_condition_list = [['Non-verbal scaffolding:affective', 'robot text:posit
                           ['Mutual gaze:MG', 'Child gaze:parent'],
                           ['Child affect', 'Parent affective touch:affective touch']]
 
-granger_robot_tests = [['Child gaze:props', 'robot pointing:point at prop'],
+granger_robot_tests = [['robot text:positive feedback', 'Child prop manipulation:child'],
+                       ['robot text:pick up', 'Child prop manipulation:child'],
+                       ['Child gaze:props', 'robot pointing:point at prop'],
                        ['Parent gaze:props', 'robot pointing:point at prop'],
                        ['Joint attention:props', 'robot pointing:point at prop'],
                        ['Parent utterance:utterance', 'robot pointing:point at prop'],

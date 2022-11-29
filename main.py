@@ -24,7 +24,7 @@ def granger(df,col1,col2,maxlag=5):
     # print('these are the constant cols = ', c, 'checking cols = ', col1, col2)
     print(["granger coloumns = ", col1, col2])
     try:
-        x_w_diff= grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
+        #x = grangercausalitytests(df[[col1, col2]].diff().dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
         x = grangercausalitytests(df[[col1, col2]].dropna(),maxlag=maxlag,verbose=False)  # null hypoposis col2 does not granger cause col1
 
         lags = list(range(1,maxlag+1))
@@ -46,10 +46,11 @@ def granger(df,col1,col2,maxlag=5):
         best_lag = 100
         best_pv = math.nan
         best_chi2v = math.nan
+        lag_chi2v = math.nan
         print(e)
     print(best_chi2v)
     # return([best_lag,best_pv])
-    return(best_chi2v, best_pv)
+    return(best_chi2v, best_pv, lag_pv)
 
 
 
@@ -587,17 +588,19 @@ def create_zero_df(features, row_num):
 
 
 def granger_condition_tests(df, test_list):
-    lag = 5
+    lag = 30
+    f_all = pd.DataFrame()
     df_pf = pd.DataFrame(columns=['p', 'f'])
     df_granger_session = pd.DataFrame()
     for test in test_list:
         col1 = test[0]
         col2 = test[1]
-        result, p = granger(df, col1, col2, maxlag=lag)
+        result, p, f_lag = granger(df, col1, col2, maxlag=lag)
         df_pf.loc[len(df_pf.index)] = [p, result]
         #result_str = str(result[0])+','+str(result[1])
 
         df_granger_session[('granger_'+col1+'_'+col2)] = [result] #[result]
+
     return df_granger_session, df_pf
 
 
@@ -668,7 +671,7 @@ if __name__ == '__main__':
     from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, \
         robot_vs_tablet, time_series_features
     #parameters
-    interval = 0.5 #time interval between time steps
+    interval = 0.3 #time interval between time steps
     #which modules of analysis to run
     run_granger = 1
     run_count = 1
@@ -756,9 +759,9 @@ if __name__ == '__main__':
     #df_count_row_all = add_derived_features(df_count_row_all)
     df_count_row_all = add_qualtrics_data_1(df_count_row_all)
     df_by_participant = session_to_participant(df_count_row_all)
-    df_by_participant.to_csv(os.path.join(path_out, "df_by_participant_lag30_int03_no_diff.csv"))
-    df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_lag30_int03_no_diff.csv"))
-    df_granger_robot.to_csv(os.path.join(path_out, "df_robot_session_lag30_int03_no_diff.csv"))
+    df_by_participant.to_csv(os.path.join(path_out, "participant_lag30_int03_no_diff.csv"))
+    df_count_row_all.to_csv(os.path.join(path_out, "session_lag30_int03_no_diff.csv"))
+    df_granger_robot.to_csv(os.path.join(path_out, "robot_session_lag30_int03_no_diff.csv"))
 
     #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
     #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
