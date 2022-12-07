@@ -133,7 +133,7 @@ def trim_by_time(df):
     if end_time - s_time >= max_time:
         end_time = s_time + max_time
     df = df[(df["s_time"] >= s_time) & (df["e_time"] <= end_time)]
-    return df
+    return df, s_time, end_time
 
 def ct_helper(df1,df2,sec,order):
     #counts if utterance at df2 started 1 sec after df1 starts or {sec} sec after it ended
@@ -272,7 +272,7 @@ def df_preprocess(df, file_base):
     for time_col in ["s_time","e_time","t_time"]:
         df[time_col] = df[time_col].apply(transfer_time_to_s)
 
-    df = trim_by_time(df) #trims data
+    df, s_time, e_time = trim_by_time(df) #trims data
     df = fillnas(df)# fill nas
     PC_frame, CP_frame, PCP_frame, CPC_frame = Conversational_turns(df,conversation_turn) #makes conversational turns
     ja_frame = joint_attention(df) #makes joint attentions
@@ -293,7 +293,7 @@ def df_preprocess(df, file_base):
     df['condition'] = condition
     df['participant'] = participant
     df['coder'] = coder
-    return(df)
+    return(df, s_time, e_time)
 
 def add_session_parameters(df, file_base):
     #print(file_base)
@@ -676,6 +676,13 @@ def remove_count_features(df, features):
     df['order'] = order
     return df
 
+def create_column_list(df, column_index):
+    column_values = []
+    for index, row in df.iterrows():
+        value = row[column_index]
+        if value not in column_values:
+            column_values.append(value)
+    return column_values
 
 if __name__ == '__main__':
     from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, \
@@ -700,8 +707,18 @@ if __name__ == '__main__':
     df_pf_robot = pd.DataFrame()
     df_pf_vs = pd.DataFrame()
     df_zeros = create_zero_df(granger_features, stitch_buffer)
+    unique_values = []
+
+    myfile = open('unique_values.txt', 'r')
+
+    data = myfile.read().splitlines()
+    dictionary = dict([tuple(line.split(',')) for line in data])
+    print(dictionary)
+
+
+
     for file in files:
-        output_folder = "output"
+        output_folder = "theme"
         output_folder_2 = "send_goren"
         file_time = time.time()
         print('new file = ', file_time)
@@ -720,73 +737,59 @@ if __name__ == '__main__':
 
         file_path = os.path.join("files",file)
         df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
-        df = df_preprocess(df, file_base) # make a df of the raw data
+        df, start_time, end_time = df_preprocess(df, file_base) # make a df of the raw data
+        #convert 's_time' columns values from seconds to milliseconds and then convert the values to integers
+        resolution = 500 #milliseconds
+        res_convert  = 1000 / resolution
+        df['s_time'] = df['s_time'].apply(lambda x: int(x*res_convert))
+        #filter df so it contains only rows that are keys in the dictionary
+        df = df[df['action:sub_action'].isin(dictionary.keys())]
+        #replace the values in the 'action:sub_action' column with the values in the dictionary
+        df['action:sub_action'] = df['action:sub_action'].map(dictionary)
+        #create a new dataframe with columns 'Time','event' and 'participant'
+        df_time = pd.DataFrame(columns=['Time','action','participant'])
+        #in the rows of the new dataframe, add the values of the 's_time' column, the values of the 'action:sub_action' column and the values of the 'participant' column
+        df_time['Time'] = df['s_time']
+        df_time['action'] = df['action:sub_action']
+        df_time['participant'] = df['who']
+        #add another column named 'event' that is a string in the format 'Time'+tab+'participant'+',b,'+'action'
+        df_time['event'] = df_time['Time'].astype(str) + '      ' + df_time['participant'].astype(str) + ',b,' + df_time['action'].astype(str)
+        #create a new dataframe that contains only the column 'event'
+        df_time = df_time[['event']]
+        #convert start_time and end_time from seconds to milliseconds and then convert the values to integers
+        start_time = int(start_time*res_convert)
+        end_time = int(end_time*res_convert)
+        # add a new first row to df_time that contains the string start_time+'    :' and reset index
+        df_time.loc[-1] = [str(start_time)+'        :']  # adding a row
+        df_time.index = df_time.index + 1  # shifting index
+        df_time = df_time.sort_index()  # sorting by index
+        #reset index of df_time
+        df_time = df_time.reset_index(drop=True)
 
-        #if run_count == 1:
-        pd.options.display.max_columns = 10
-        print(f"made csv for {file_base}")
-        pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
-        df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
-        #transform to row
-        df_count_row = df_count.stack(level=0)
-        df_count_row = add_remove_features(df_count_row, count_features, file_base)
-        df_count_row = convert_labels(df_count_row)
-        df_count_row = add_object_features_row(df_count_row)
-        df_count_row = remove_count_features(df_count_row, robot_vs_tablet)
+        # add a new last row to df_time that contains the string end_time+'    &' and reset index
+        df_time.loc[len(df_time)] = [str(end_time)+'      &']  # adding a row
+        df_time.index = df_time.index + 1  # shifting index
+        df_time = df_time.sort_index()  # sorting by index
+        #add a new first line with the string 'Time    event' to df_time
+        df_time.loc[-1] = ['Time      event']  # adding a row
+        df_time.index = df_time.index + 1  # shifting index
+        df_time = df_time.sort_index()  # sorting by index
+        #reset index of df_time
+        df_time = df_time.reset_index(drop=True)
+        #create a string that is the same as file_base but without the underscores
+        file_base_no_underscore = file_base.replace("_","")
+        #save df_time to a txt file in the directly in output folder
+        #df_time.to_csv(output_folder + '/'+ file_base_no_underscore + '.txt', sep='\t', index=False, header=False)
+        #split df_time into to columns 'Time' and 'event' without blank spaces
+        df_time = df_time['event'].str.split('      ', 1, expand=True)
+        #rename the columns of df_time to 'Time' and 'event'
+        df_time.columns = ['Time', 'event']
+        #save df_time to a tab delimited txt file
+        df_time.to_csv(output_folder + '/' + file_base_no_underscore + '.txt', sep='\t', index=False, header=False)
 
-        df_time_action = transform_to_time_representation(df, "action", interval)
-        df_time_action.drop(['time'], axis=1, inplace = True)
-        df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
-        df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
-        df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
-        df_time = add_remove_features_granger(df_time, granger_features)
-        df_time = add_object_features_time(df_time)
-        df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
-        print('made csv')
-        if condition == 'r':
-            df_granger_session_robot, df_pf, df_lag_log, df_chi_log = granger_condition_tests(df_time, granger_robot_tests)
-            all_lag_log = pd.concat([all_lag_log, df_lag_log], ignore_index=True)
-            all_chi_log = pd.concat([all_chi_log, df_chi_log], ignore_index=True)
-            df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)
-            df_pf_robot = pd.concat([df_pf_robot, df_pf], ignore_index=True)
-        df_granger_session, df_pf, lag_log, chi_log = granger_condition_tests(df_time, granger_condition_list)
-        df_pf_vs = pd.concat([df_pf_vs, df_pf], ignore_index=True)
-        df_count_row = pd.concat([df_granger_session, df_count_row], axis=1)
-        df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
 
-        df_time = pd.concat([df_time, df_zeros], ignore_index=True)
-        df_time_all = pd.concat([df_time_all, df_time], ignore_index=True)
-        if condition == 'r':
-            df_time_robot = pd.concat([df_time_robot, df_time], ignore_index=True)
-        elif condition == 't':
-            df_time_tablet = pd.concat([df_time_tablet, df_time], ignore_index=True)
-        #df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
-        path_file_base = os.path.join(path,file_base)
-        print(f"{path_file_base} action time rep.csv", time.time()-file_time)
-        print(f"made time representation for {file_base}", time.time()-file_time)
-        #all_windows_df = all_windows(df,10,20)
-        #all_windows_df.to_csv(f"{path_file_base} windows.csv")
-    #df_count_row_all = add_object_features_row(df_count_row_all)
-    #df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_1.csv"))
-    #df_count_row_all = session_to_participant(df_count_row_all)
-    #df_count_row_all = add_derived_features(df_count_row_all)
-    df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-    df_by_participant = session_to_participant(df_count_row_all)
-    all_lag_log.to_pickle(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.pkl"))
-    all_chi_log.to_pickle(os.path.join(path_out, "all_chi_log_lag60_int1_w_diff.pkl"))
+        print('b')
 
-    all_lag_log.to_csv(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.csv"))
-    #df_by_participant.to_csv(os.path.join(path_out, "participant_lag30_int03_no_diff.csv"))
-    #df_count_row_all.to_csv(os.path.join(path_out, "session_lag30_int03_no_diff.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "robot_session_lag30_int03_no_diff.csv"))
 
-    #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
-    #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
-    #df_pf_robot.plot(x='f', y='p', style='o')
-    #df_pf_vs.plot(x='f', y='p', style='o')
-    #plt.show()
-    #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
-    #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
 
 

@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import matplotlib as mpl
+import seaborn as sns
 from scipy import stats
 from variables import robot_vs_tablet, granger_condition_list
 from matplotlib import pyplot as plt

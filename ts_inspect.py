@@ -700,93 +700,80 @@ if __name__ == '__main__':
     df_pf_robot = pd.DataFrame()
     df_pf_vs = pd.DataFrame()
     df_zeros = create_zero_df(granger_features, stitch_buffer)
-    for file in files:
-        output_folder = "output"
-        output_folder_2 = "send_goren"
-        file_time = time.time()
-        print('new file = ', file_time)
-        file_base = file[:-4]
-        file_split = file_base.split("_")
-        lesson_split = list(file_split[0])
-        condition = lesson_split[2]
-        path = os.path.join(output_folder,file_base)
-        path_out = os.path.join(output_folder)
-        path_out_2 = os.path.join(output_folder_2)
-        print(path_out)
-        # re creates folder
-        if os.path.exists(path):
-            rmtree(path)
-        os.makedirs(path)
 
-        file_path = os.path.join("files",file)
-        df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
-        df = df_preprocess(df, file_base) # make a df of the raw data
 
-        #if run_count == 1:
-        pd.options.display.max_columns = 10
-        print(f"made csv for {file_base}")
-        pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
-        df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
-        #transform to row
-        df_count_row = df_count.stack(level=0)
-        df_count_row = add_remove_features(df_count_row, count_features, file_base)
-        df_count_row = convert_labels(df_count_row)
-        df_count_row = add_object_features_row(df_count_row)
-        df_count_row = remove_count_features(df_count_row, robot_vs_tablet)
+    file = files[5]
 
-        df_time_action = transform_to_time_representation(df, "action", interval)
-        df_time_action.drop(['time'], axis=1, inplace = True)
-        df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
-        df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
-        df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
-        df_time = add_remove_features_granger(df_time, granger_features)
-        df_time = add_object_features_time(df_time)
-        df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
-        print('made csv')
-        if condition == 'r':
-            df_granger_session_robot, df_pf, df_lag_log, df_chi_log = granger_condition_tests(df_time, granger_robot_tests)
-            all_lag_log = pd.concat([all_lag_log, df_lag_log], ignore_index=True)
-            all_chi_log = pd.concat([all_chi_log, df_chi_log], ignore_index=True)
-            df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)
-            df_pf_robot = pd.concat([df_pf_robot, df_pf], ignore_index=True)
-        df_granger_session, df_pf, lag_log, chi_log = granger_condition_tests(df_time, granger_condition_list)
-        df_pf_vs = pd.concat([df_pf_vs, df_pf], ignore_index=True)
-        df_count_row = pd.concat([df_granger_session, df_count_row], axis=1)
-        df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
 
-        df_time = pd.concat([df_time, df_zeros], ignore_index=True)
-        df_time_all = pd.concat([df_time_all, df_time], ignore_index=True)
-        if condition == 'r':
-            df_time_robot = pd.concat([df_time_robot, df_time], ignore_index=True)
-        elif condition == 't':
-            df_time_tablet = pd.concat([df_time_tablet, df_time], ignore_index=True)
-        #df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
-        path_file_base = os.path.join(path,file_base)
-        print(f"{path_file_base} action time rep.csv", time.time()-file_time)
-        print(f"made time representation for {file_base}", time.time()-file_time)
-        #all_windows_df = all_windows(df,10,20)
-        #all_windows_df.to_csv(f"{path_file_base} windows.csv")
-    #df_count_row_all = add_object_features_row(df_count_row_all)
-    #df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_1.csv"))
-    #df_count_row_all = session_to_participant(df_count_row_all)
-    #df_count_row_all = add_derived_features(df_count_row_all)
-    df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-    df_by_participant = session_to_participant(df_count_row_all)
-    all_lag_log.to_pickle(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.pkl"))
-    all_chi_log.to_pickle(os.path.join(path_out, "all_chi_log_lag60_int1_w_diff.pkl"))
+    output_folder = "output"
+    output_folder_2 = "send_goren"
+    file_time = time.time()
+    print('new file = ', file_time)
+    file_base = file[:-4]
+    file_split = file_base.split("_")
+    lesson_split = list(file_split[0])
+    condition = lesson_split[2]
+    path = os.path.join(output_folder,file_base)
+    path_out = os.path.join(output_folder)
+    path_out_2 = os.path.join(output_folder_2)
+    print(path_out)
+    # re creates folder
+    if os.path.exists(path):
+        rmtree(path)
+    os.makedirs(path)
 
-    all_lag_log.to_csv(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.csv"))
-    #df_by_participant.to_csv(os.path.join(path_out, "participant_lag30_int03_no_diff.csv"))
-    #df_count_row_all.to_csv(os.path.join(path_out, "session_lag30_int03_no_diff.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "robot_session_lag30_int03_no_diff.csv"))
+    file_path = os.path.join("files",file)
+    df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
+    df = df_preprocess(df, file_base) # make a df of the raw data
 
-    #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
-    #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
-    #df_pf_robot.plot(x='f', y='p', style='o')
-    #df_pf_vs.plot(x='f', y='p', style='o')
-    #plt.show()
-    #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
-    #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
+    #if run_count == 1:
+    pd.options.display.max_columns = 10
+    print(f"made csv for {file_base}")
+    pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
+    df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
+    #transform to row
+    df_count_row = df_count.stack(level=0)
+    df_count_row = add_remove_features(df_count_row, count_features, file_base)
+    df_count_row = convert_labels(df_count_row)
+    df_count_row = add_object_features_row(df_count_row)
+    df_count_row = remove_count_features(df_count_row, robot_vs_tablet)
+
+    df_time_action = transform_to_time_representation(df, "action", interval)
+    df_time_action.drop(['time'], axis=1, inplace = True)
+    df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
+    df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
+    df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
+    df_time = add_remove_features_granger(df_time, granger_features)
+    df_time = add_object_features_time(df_time)
+    df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
+    #create a plot of the column "Child utterance:utterance" and the column "Parent utterance:utterance" of df_time in the y axis and the index in the x axis
+
+    # create a plot with two subplots one above the other
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+    # in the first subplot, plot the column "Child utterance:utterance" of df_time in the y axis and the index in the x axis
+    ax1.plot(df_time.index, df_time['Child utterance:utterance'])
+    # in the second subplot, plot the column "Parent utterance:utterance" of df_time in the y axis and the index in the x axis
+    ax1.plot(df_time.index, df_time['Parent utterance:utterance'])
+    ax1.plot(df_time.index, df_time['robot text:pick up'])
+    col2 = 'robot text:pick up'
+    col1 = 'Child utterance:utterance'
+    maxlag = 30
+
+    a, b, c, d = granger(df_time,'Child affect' , 'Parent affect', maxlag=30)
+    # plot c and d
+    # create a  plot with two subplots
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    # on the top point plot c
+    ax1.plot(c)
+    # on the bottom plot d
+    ax2.plot(d)
+    # show the plot
+    plt.show()
+
+    # show the plot
+    plt.show()
+
+
 
 

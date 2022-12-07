@@ -1,0 +1,38 @@
+Child utterance:utterance,utterance
+Child gaze:robot,gaze_robot
+Child gaze:parent,gaze_parent
+Child gaze:props,gaze_props
+Child affect:positive 1,affect
+Child affect:positive 2,affect
+Child affect:positive 3,affect
+Child gesture:point at prop,gesture
+Child affective touch:affective touch,affective_touch
+Parent utterance:utterance,utterance
+Verbal scaffolding:affective,verbal_affective
+Verbal scaffolding:cognitive,verbal_cognitive
+Non-verbal scaffolding:cognitive,nonverbal_cognitive
+Parent gaze:child,gaze_child
+Parent gaze:robot,gaze_robot
+Parent gaze:props,gaze_props
+Parent affect:positive 2,affect
+Parent affect:positive 1,affect
+Parent gesture:point at prop,gesture
+Parent affective touch:affective touch,affective_touch
+Child prop manipulation:child,prop_manipulation
+Parent prop manipulation:parent,prop_manipulation
+robot pointing:point at prop,point
+robot text:song,song
+robot text:teach,teach
+robot text:pick up,pick_up
+robot text:try again,try_again
+robot text:positive feedback,positive_feedback
+robot text:put down,put_down
+Non-verbal scaffolding:technical,nonverbal_technical
+Parent affect:positive 3,affect
+Non-verbal scaffolding:affective,nonverbal_affective
+Verbal scaffolding:technical,verbal_technical
+Child gaze:robot or prop,gaze_robot_or_prop
+Parent gaze:robot or prop,gaze_robot_or_prop
+Child gaze:tablet,gaze_tablet
+Parent gaze:tablet,gaze_tablet
+Child affect:positive 4,affect
