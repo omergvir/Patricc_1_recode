@@ -1,0 +1,12 @@
+Child utterance:utterance,utterance
+Child gaze:parent,gaze_parent
+Child affect:positive 1,affect
+Child affect:positive 2,affect
+Child affect:positive 3,affect
+Parent utterance:utterance,utterance
+Parent gaze:child,gaze_child
+Parent affect:positive 2,affect
+Parent affect:positive 1,affect
+robot text:pick up,pick_up
+Parent affect:positive 3,affect
+Child affect:positive 4,affect

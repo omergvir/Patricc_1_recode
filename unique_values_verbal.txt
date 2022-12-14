@@ -1,0 +1,9 @@
+Child utterance:utterance,utterance
+Parent utterance:utterance,utterance
+Verbal scaffolding:affective,verbal_affective
+Verbal scaffolding:cognitive,verbal_cognitive
+robot text:pick up,pick_up
+robot text:positive feedback,positive_feedback
+Verbal scaffolding:technical,verbal_technical
+robot text:put down,put_down
+robot text:try again,try_again

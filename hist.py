@@ -14,6 +14,7 @@ from scipy.stats import chi2_contingency
 from statsmodels.tsa.stattools import grangercausalitytests
 from functools import reduce
 from shutil import rmtree
+import pickle
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 dir_path = os.path.dirname(sys.argv[0])
@@ -138,7 +139,7 @@ def trim_by_time(df):
     if end_time - s_time >= max_time:
         end_time = s_time + max_time
     df = df[(df["s_time"] >= s_time) & (df["e_time"] <= end_time)]
-    return df
+    return df, s_time, end_time
 
 def ct_helper(df1,df2,sec,order):
     #counts if utterance at df2 started 1 sec after df1 starts or {sec} sec after it ended
@@ -277,7 +278,7 @@ def df_preprocess(df, file_base):
     for time_col in ["s_time","e_time","t_time"]:
         df[time_col] = df[time_col].apply(transfer_time_to_s)
 
-    df = trim_by_time(df) #trims data
+    df, s_time, e_time = trim_by_time(df) #trims data
     df = fillnas(df)# fill nas
     PC_frame, CP_frame, PCP_frame, CPC_frame = Conversational_turns(df,conversation_turn) #makes conversational turns
     ja_frame = joint_attention(df) #makes joint attentions
@@ -298,6 +299,8 @@ def df_preprocess(df, file_base):
     df['condition'] = condition
     df['participant'] = participant
     df['coder'] = coder
+    df['start_time'] = s_time
+    df['end_time'] = e_time
     return(df)
 
 def add_session_parameters(df, file_base):
@@ -685,125 +688,186 @@ def remove_count_features(df, features):
     df['order'] = order
     return df
 
+def action_hist(df, t_window, cause, effects):
+    df_hist = pd.DataFrame(columns=['cause', 'effect', 's_time', 'condition','participant'])
+    #create dataframe that contains the rows of df where the values of 'action:sub_action' is cause
+    df_cause = df.loc[df['action:sub_action'] == cause]
+    #iterate the rows of df_cause
+    for index, row in df_cause.iterrows():
+        #create variable which is that value of 's_time' of the row
+        cause_time = row['s_time']
+        time_window = [cause_time-t_window, cause_time+t_window]
+        #iterate through the rows of df
+        for index2, row2 in df.iterrows():
+            #if the value of 'action:sub_action' of this row is not cause
+            if row2['action:sub_action'] != cause:
+                #if the value of 's_time' of this row is within the time window
+                if row2['s_time'] >= time_window[0] and row2['s_time'] <= time_window[1]:
+                    #create a variable that is the difference between the value of 's_time' of this row and the value of 's_time' of the cause row
+                    time_diff = row2['s_time'] - cause_time
+                    #add a new row to df_hist with the value of 'action:sub_action' of this row, the value of time_diff, the value of 'condition_' of this row, and the value of 'participant_' of this row
+                    df_hist.loc[len(df_hist.index)] = [cause, row2['action:sub_action'], time_diff, row2['condition'], row2['participant']]
+
+    return df_hist
+
+#write a function that takes in a dataframe, removes the rows where that value of 'action:sub_action' is not in the list of actions, and returns the dataframe
+def remove_actions(df, actions):
+    df = df[df['action:sub_action'].isin(actions)]
+    return df
+
 
 if __name__ == '__main__':
     from variables import count_features, granger_features, granger_condition_list, granger_robot_tests, \
-        robot_vs_tablet, time_series_features
+        robot_vs_tablet, time_series_features, hist_features
     #parameters
-    interval = 0.3 #time interval between time steps
-    #which modules of analysis to run
-    run_granger = 1
-    run_count = 1
-    stitch_buffer = 30 # number of rows to buffer between stitching time series from different sessions
-    all_lag_log = pd.DataFrame(columns=['col1', 'col2', 'lag'])
-    all_chi_log = pd.DataFrame(columns=['col1', 'col2', 'lag'])
-    #load data
-    files = os.listdir("files")
-    #set window paramaters
-    col_base, action_base, col_count, action_count = "action","Child gaze","action",'all'
-    df_count_row_all = pd.DataFrame()
-    df_granger_robot = pd.DataFrame()
-    df_time_all = pd.DataFrame()
-    df_time_tablet = pd.DataFrame()
-    df_time_robot = pd.DataFrame()
-    df_pf_robot = pd.DataFrame()
-    df_pf_vs = pd.DataFrame()
-    df_zeros = create_zero_df(granger_features, stitch_buffer)
-    for file in files:
-        output_folder = "output"
-        output_folder_2 = "send_goren"
-        file_time = time.time()
-        print('new file = ', file_time)
-        file_base = file[:-4]
-        file_split = file_base.split("_")
-        lesson_split = list(file_split[0])
-        condition_temp = lesson_split[2]
-        if condition_temp == 'r':
-            condition = 1
-        else:
-            condition = 2
+    output_folder = "output"
+    path_out = os.path.join(output_folder)
+    run_calculations = 1
+    Nbins = 10
+    t_window = 10
+   #cause = 'robot text:pick up'
+    cause = 'Child utterance:utterance'
+    if run_calculations == 1:
 
-        path = os.path.join(output_folder,file_base)
-        path_out = os.path.join(output_folder)
-        path_out_2 = os.path.join(output_folder_2)
-        print(path_out)
-        # re creates folder
-        if os.path.exists(path):
-            rmtree(path)
-        os.makedirs(path)
+        interval = 0.3 #time interval between time steps
+        #which modules of analysis to run
+        run_granger = 0
+        run_count = 0
+        stitch_buffer = 30 # number of rows to buffer between stitching time series from different sessions
+        all_lag_log = pd.DataFrame(columns=['col1', 'col2', 'lag'])
+        all_chi_log = pd.DataFrame(columns=['col1', 'col2', 'lag'])
+        #load data
+        files = os.listdir("files")
+        #set window paramaters
+        col_base, action_base, col_count, action_count = "action","Child gaze","action",'all'
+        df_count_row_all = pd.DataFrame()
+        df_granger_robot = pd.DataFrame()
+        df_time_all = pd.DataFrame()
+        df_time_tablet = pd.DataFrame()
+        df_time_robot = pd.DataFrame()
+        df_pf_robot = pd.DataFrame()
+        df_pf_vs = pd.DataFrame()
+        df_zeros = create_zero_df(granger_features, stitch_buffer)
+        df_hist_all = pd.DataFrame()
+        df_hist_effect = pd.DataFrame()
 
-        file_path = os.path.join("files",file)
-        df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
-        df = df_preprocess(df, file_base) # make a df of the raw data
 
-        #if run_count == 1:
-        pd.options.display.max_columns = 10
-        print(f"made csv for {file_base}")
-        pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")]).to_csv(os.path.join(path,f"{file_base} sum_count.csv"))
-        df_count = pd.concat([make_crosstab(df,"action"),make_crosstab(df,"sub_action"),make_crosstab(df,"action:sub_action")])
-        #transform to row
-        df_count_row = df_count.stack(level=0)
-        df_count_row = add_remove_features(df_count_row, count_features, file_base)
-        df_count_row = convert_labels(df_count_row)
-        df_count_row = add_object_features_row(df_count_row)
-        df_count_row = remove_count_features(df_count_row, robot_vs_tablet)
+        for file in files:
 
-        df_time_action = transform_to_time_representation(df, "action", interval)
-        df_time_action.drop(['time'], axis=1, inplace = True)
-        df_time_sub_action_sub_action = transform_to_time_representation(df, "action:sub_action", interval)
-        df_time_sub_action_sub_action.drop(['time'], axis=1, inplace = True)
-        df_time = pd.concat([df_time_action, df_time_sub_action_sub_action], axis=1)
-        df_time = add_remove_features_granger(df_time, granger_features)
-        df_time = add_object_features_time(df_time)
-        df_time.to_csv(os.path.join(path_out_2, file_base+'.csv'))
-        print('made csv')
-        if run_granger == 1:
-            if condition == 'r':
-                df_granger_session_robot, df_pf, df_lag_log, df_chi_log = granger_condition_tests(df_time, granger_robot_tests)
-                all_lag_log = pd.concat([all_lag_log, df_lag_log], ignore_index=True)
-                all_chi_log = pd.concat([all_chi_log, df_chi_log], ignore_index=True)
-                df_granger_robot = pd.concat([df_granger_robot, df_granger_session_robot], ignore_index=True)
-                df_pf_robot = pd.concat([df_pf_robot, df_pf], ignore_index=True)
-            df_granger_session, df_pf, lag_log, chi_log = granger_condition_tests(df_time, granger_condition_list)
-            df_pf_vs = pd.concat([df_pf_vs, df_pf], ignore_index=True)
-            df_count_row = pd.concat([df_granger_session, df_count_row], axis=1)
-            df_count_row_all = pd.concat([df_count_row_all, df_count_row], ignore_index=True)
+            output_folder = "output"
+            output_folder_2 = "send_goren"
+            file_time = time.time()
+            print('new file = ', file_time)
+            file_base = file[:-4]
+            file_split = file_base.split("_")
+            lesson_split = list(file_split[0])
+            condition_temp = lesson_split[2]
+            if condition_temp == 'r':
+                condition = 1
+            else:
+                condition = 2
 
-            df_time = pd.concat([df_time, df_zeros], ignore_index=True)
-            df_time_all = pd.concat([df_time_all, df_time], ignore_index=True)
-            if condition == 'r':
-                df_time_robot = pd.concat([df_time_robot, df_time], ignore_index=True)
-            elif condition == 't':
-                df_time_tablet = pd.concat([df_time_tablet, df_time], ignore_index=True)
-            #df_time_sub_action_sub_action = drop_features(df_time_sub_action_sub_action)
-            path_file_base = os.path.join(path,file_base)
-            print(f"{path_file_base} action time rep.csv", time.time()-file_time)
-            print(f"made time representation for {file_base}", time.time()-file_time)
-        #all_windows_df = all_windows(df,10,20)
-        #all_windows_df.to_csv(f"{path_file_base} windows.csv")
-    #df_count_row_all = add_object_features_row(df_count_row_all)
-    #df_count_row_all.to_csv(os.path.join(path_out, "df_by_session_1.csv"))
-    #df_count_row_all = session_to_participant(df_count_row_all)
-    #df_count_row_all = add_derived_features(df_count_row_all)
-    df_count_row_all = add_qualtrics_data_1(df_count_row_all)
-    df_by_participant = session_to_participant(df_count_row_all)
+            path = os.path.join(output_folder,file_base)
+            path_out = os.path.join(output_folder)
+            path_out_2 = os.path.join(output_folder_2)
+            print(path_out)
+            # re creates folder
+            if os.path.exists(path):
+                rmtree(path)
+            os.makedirs(path)
 
-    #all_lag_log.to_pickle(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.pkl"))
-    #all_chi_log.to_pickle(os.path.join(path_out, "all_chi_log_lag60_int1_w_diff.pkl"))
+            file_path = os.path.join("files",file)
+            df = pd.read_csv(file_path, sep='\t', engine='python',header = None)
+            df = df_preprocess(df, file_base) # make a df of the raw data
+            # in the column of df called 'action:sub_action', replace values that start with 'Parent affect' to 'Parent affect'
+            df.loc[df['action:sub_action'].str.startswith('Parent affect'), 'action:sub_action'] = 'Parent affect'
+            # in the column of df called 'action:sub_action', replace the values that start with "Child affect" to "Child affect"
+            df.loc[df['action:sub_action'].str.startswith('Child affect'), 'action:sub_action'] = 'Child affect'
+            df = remove_actions(df, hist_features)
 
-    #all_lag_log.to_csv(os.path.join(path_out, "all_lag_log_lag60_int1_w_diff.csv"))
 
-    df_by_participant.to_csv(os.path.join(path_out, "participant_int03.csv"))
-    df_count_row_all.to_csv(os.path.join(path_out, "session_int03.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "robot_session_lag30_int03_no_diff.csv"))
+            #create a variable named effects that is a list of all the unique values of 'action:sub_action' in df
+            effects = df['action:sub_action'].unique()
+            #iterate through all the values of effects
+            for effect in effects:
+                print(effect)
+                cause = effect
+                df_hist = action_hist(df, t_window, cause, effects)
+                df_hist_effect = pd.concat([df_hist_effect, df_hist], axis=0)
+            df_hist_all = pd.concat([df_hist_all, df_hist_effect], axis=0)
 
-    #df_pf_robot.to_csv(os.path.join(path_out, "df_pf_robot_lag10.csv"))
-    #df_pf_vs.to_csv(os.path.join(path_out, "df_pf_vs_lag10.csv"))
-    #df_pf_robot.plot(x='f', y='p', style='o')
-    #df_pf_vs.plot(x='f', y='p', style='o')
-    #plt.show()
-    #df_granger_robot = granger_condition_tests(df_time_robot, granger_robot_tests)
-    #df_count_row_all.to_csv(os.path.join(path_out,"df_count_all_int_05.csv"))
-    #df_granger_robot.to_csv(os.path.join(path_out, "df_granger_robot_int_05.csv"))
+            #pickle df_hist_all to the main folder
+        df_hist_all.to_pickle(os.path.join(path_out, 'df_hist_all.pkl'))
+
+    #load the pickled df_hist_all
+    df_hist_all = pd.read_pickle(os.path.join(path_out, 'df_hist_all.pkl'))
+
+    #create and disdplay a plot for each effect in df_hist_all, in the plat draw two overlaid histograms, one for the condition 'r' and one for the condition 't'. Set the title of the plot to be the effect
+    for cause in df_hist_all['cause'].unique():
+        for effect in df_hist_all['effect'].unique():
+            #create a dataframe that contains the rows of df_hist_all where the value of 'effect' is effect and the value of 'condition' is 'r'
+            df_hist_r = df_hist_all[(df_hist_all['effect'] == effect) & (df_hist_all['condition'] == 'r')]
+            #create a dataframe that contains the rows of df_hist_all where the value of 'effect' is effect and the value of 'condition' is 't'
+            df_hist_t = df_hist_all[(df_hist_all['effect'] == effect) & (df_hist_all['condition'] == 't')]
+            #create a plot with two overlaid histograms, one for the values of 'time_diff' in df_hist_r and one for the values of 'time_diff' in df_hist_t. Set the title of the plot to be effect. Set the color of the histogram for 'r' to be red and the color of the histogram for 't' to be blue
+            plt.hist(df_hist_r['s_time'], color='red', alpha=0.5, label='r')
+            plt.hist(df_hist_t['s_time'], color='blue', alpha=0.5, label='t')
+#set the title of the plot to be cause-effect
+            plt.title(f"{cause}-{effect}")
+            plt.legend(loc='upper right')
+            #add a vertical line to the plot at x = 0
+            plt.axvline(x=0, color='k', linestyle='--')
+            #create a dataframe that has the columns 'count', participant'
+            df_count_r = pd.DataFrame(columns=['count', 'participant'])
+            #for each unique participant count the number of rows in df_hist_r where 's_time' is less than 0 and save the result in a new row of df_count_r with the value of 'count' being the count and the value of 'participant' being the participant
+            for participant in df_hist_r['participant'].unique():
+                df_count_r = df_count_r.append({'count':len(df_hist_r[(df_hist_r['s_time'] < 0) & (df_hist_r['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            #calculate the mean and standard deviation of the values of 'count' in df_count_r
+            mean_r = df_count_r['count'].mean()
+            std_r = df_count_r['count'].std()
+            #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
+            plt.plot([-t_window,0], [mean_r, mean_r], color='red')
+            #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
+            #plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
+            #plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+
+            #create a dataframe that has the columns 'count', participant'
+            df_count_r = pd.DataFrame(columns=['count', 'participant'])
+            #for each unique participant count the number of rows in df_hist_r where 's_time' is less than 0 and save the result in a new row of df_count_r with the value of 'count' being the count and the value of 'participant' being the participant
+            for participant in df_hist_r['participant'].unique():
+                df_count_r = df_count_r.append({'count':len(df_hist_r[(df_hist_r['s_time'] > 0) & (df_hist_r['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            #calculate the mean and standard deviation of the values of 'count' in df_count_r
+            mean_r = df_count_r['count'].mean()
+            std_r = df_count_r['count'].std()
+            #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
+            plt.plot([0,t_window], [mean_r, mean_r], color='red')
+            #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
+            #plt.plot([0,t_window], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
+            #plt.plot([0,t_window], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+
+            #do the same thing for the condition 't'
+            df_count_t = pd.DataFrame(columns=['count', 'participant'])
+            for participant in df_hist_t['participant'].unique():
+                df_count_t = df_count_t.append({'count':len(df_hist_t[(df_hist_t['s_time'] < 0) & (df_hist_t['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            mean_t = df_count_t['count'].mean()
+            std_t = df_count_t['count'].std()
+            plt.plot([-t_window,0], [mean_t, mean_t], color='blue')
+            #plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
+            #plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+            #do the same thing for the condition 't'
+            df_count_t = pd.DataFrame(columns=['count', 'participant'])
+            for participant in df_hist_t['participant'].unique():
+                df_count_t = df_count_t.append({'count':len(df_hist_t[(df_hist_t['s_time'] > 0) & (df_hist_t['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            mean_t = df_count_t['count'].mean()
+            std_t = df_count_t['count'].std()
+            plt.plot([0,t_window], [mean_t, mean_t], color='blue')
+            #plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
+            #plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+
+            plt.show()
+
+
+
+
 
 

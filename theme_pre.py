@@ -786,7 +786,8 @@ if __name__ == '__main__':
         df_time.columns = ['Time', 'event']
         #save df_time to a tab delimited txt file
         df_time.to_csv(output_folder + '/' + file_base_no_underscore + '.txt', sep='\t', index=False, header=False)
-
+        # save df_time as .txt file in the folder C:\Users\omerg\Dropbox\research\experiment two\theme\raw data
+        df_time.to_csv('C:\\Users\\omerg\\Dropbox\\research\\experiment two\\theme\\raw data\\' + file_base_no_underscore + '.txt', sep='\t', index=False, header=False)
 
         print('b')
 

@@ -11,7 +11,8 @@ from variables import robot_vs_tablet, granger_condition_list
 from matplotlib import pyplot as plt
 
 #df = pd.read_csv('output/all_lag_log_lag30_int03_no_diff.csv')
-df = pd.read_pickle('output/all_chi_log_lag60_int1_w_diff.pkl')
+#df = pd.read_pickle('output/all_chi_log_lag60_int1_w_diff.pkl')
+df = pd.read_pickle('output/all_lag_log_lag60_int1_w_diff.pkl')
 pick_up = df[df["col2"] == 'robot text:pick up']
 #pick_up = df[df["col1"] == 'Parent gaze:props']
 pick_up = pick_up.reset_index()

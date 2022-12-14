@@ -32,6 +32,22 @@ count_features = ['Child affect',
                   'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
                   'Parent utterance:utterance']
 
+hist_features = ['Child affect',
+                  'Child affective touch:affective touch', 'Child gaze:parent', 'Child gaze:props', 'Child gaze:tablet',
+                  'Child gaze:robot', 'Child prop manipulation:child',
+                  'Child utterance:utterance',
+                  'Mutual gaze:MG',
+                  'Non-verbal scaffolding:cognitive', 'Non-verbal scaffolding:affective',
+                  'Non-verbal scaffolding:technical',
+                  'Verbal scaffolding:affective', 'Verbal scaffolding:cognitive',
+                  'Verbal scaffolding:technical',
+                  'Parent affect',
+                  'Parent affective touch:affective touch',
+                  'Parent prop manipulation:parent','Parent gesture:point at prop', 'Child gesture:point at prop',
+                  'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
+                  'Parent utterance:utterance','robot text:positive feedback', 'robot text:pick up',
+                  'robot pointing:point at prop']
+
 robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG',
                    'Child gaze:object', 'Parent gaze:object',
                    'Parent affective touch:affective touch', 'Child affective touch:affective touch',

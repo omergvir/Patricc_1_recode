@@ -1,0 +1,7 @@
+Child utterance:utterance,utterance
+Parent utterance:utterance,utterance
+robot text:pick up,pick_up
+robot text:positive feedback,pick_up
+robot text:put down,pick_up
+robot text:try again,pick_up
+robot text:teach,pick_up

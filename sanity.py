@@ -50,21 +50,25 @@ def granger(df,col1,col2,maxlag=5):
     return(best_chi2v, min_pv, lag_pv, lag_chi2v)
 
 
-
+length = 1000
+delay = 20
 # create a list of random numbers with a length 0f 300
-random_list = np.random.randint(0, 100, 300)
+random_list = np.random.randint(0, 100, length)
 # create a list of random numbers with a length of 10
-random_list2 = np.random.randint(0, 100, 15)
+random_list2 = np.random.randint(0, 100, delay)
 #create a list that is random_list2 and after that random_list
 random_list3 = random_list2.tolist() + random_list.tolist()
 #create a new list that containts only the first 300 elements of random_list
-random_list4 = random_list3[:300]
+random_list4 = random_list3[:length]
 # convert random_list4 to a numpy array
 random_list4 = np.array(random_list4)
 # add random noise to random_list4
-random_list4 = random_list4 + np.random.normal(0, 1, 300)
+random_list4 = random_list4 + np.random.normal(0, 1, length)
 # add random noise to random_list
-random_list = random_list + np.random.normal(0, 1, 300)
+random_list = random_list + np.random.normal(0, 1, length)
+
+#random_list4 = np.random.randint(0, 100, length)
+#random_list1 = np.random.randint(0, 100, length)
 
 col1 = random_list4
 col2 = random_list
@@ -76,7 +80,7 @@ df = pd.DataFrame({'col1': col1, 'col2': col2})
 df.plot()
 # show the plot
 plt.show()
-a,b,c,d = granger(df,'col1','col2',maxlag=30)
+a,b,c,d = granger(df,'col1','col2',maxlag=60)
 # plot c and d
 #create a plot with two subplots
 fig, (ax1, ax2) = plt.subplots(2, 1)
@@ -85,4 +89,6 @@ ax1.plot(c)
 #on the bottom plot d
 ax2.plot(d)
 # show the plot
+print(b)
+print(c)
 plt.show()

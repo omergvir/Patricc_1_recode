@@ -1,0 +1,5 @@
+Child utterance:utterance,utterance
+Child gaze:parent,gaze_parent
+Parent utterance:utterance,utterance
+Parent gaze:child,gaze_child
+robot text:pick up,pick_up
