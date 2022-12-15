@@ -12,8 +12,10 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 from scipy.stats import chi2_contingency
 from statsmodels.tsa.stattools import grangercausalitytests
+from statsmodels.stats.anova import AnovaRM
 from functools import reduce
 from shutil import rmtree
+import pingouin as pg
 import pickle
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -136,6 +138,9 @@ def trim_by_time(df):
     max_time = 300 #sessions are trimmed at 5 minutes (300 sec)
     s_time = df["s_time"][df["action"] == 'start-end'].values[0]+0.001
     end_time = df["e_time"][df["action"] == 'start-end'].values[1]-0.001
+    # print the difference between the start and end time
+    print('duration')
+    print(end_time-s_time)
     if end_time - s_time >= max_time:
         end_time = s_time + max_time
     df = df[(df["s_time"] >= s_time) & (df["e_time"] <= end_time)]
@@ -688,25 +693,28 @@ def remove_count_features(df, features):
     df['order'] = order
     return df
 
-def action_hist(df, t_window, cause, effects):
+def action_hist(df, t_window, causes, effects):
     df_hist = pd.DataFrame(columns=['cause', 'effect', 's_time', 'condition','participant'])
-    #create dataframe that contains the rows of df where the values of 'action:sub_action' is cause
-    df_cause = df.loc[df['action:sub_action'] == cause]
-    #iterate the rows of df_cause
-    for index, row in df_cause.iterrows():
-        #create variable which is that value of 's_time' of the row
-        cause_time = row['s_time']
-        time_window = [cause_time-t_window, cause_time+t_window]
-        #iterate through the rows of df
-        for index2, row2 in df.iterrows():
-            #if the value of 'action:sub_action' of this row is not cause
-            if row2['action:sub_action'] != cause:
-                #if the value of 's_time' of this row is within the time window
-                if row2['s_time'] >= time_window[0] and row2['s_time'] <= time_window[1]:
-                    #create a variable that is the difference between the value of 's_time' of this row and the value of 's_time' of the cause row
-                    time_diff = row2['s_time'] - cause_time
-                    #add a new row to df_hist with the value of 'action:sub_action' of this row, the value of time_diff, the value of 'condition_' of this row, and the value of 'participant_' of this row
-                    df_hist.loc[len(df_hist.index)] = [cause, row2['action:sub_action'], time_diff, row2['condition'], row2['participant']]
+    #iterate over all the elements in causes
+    for cause in causes:
+        #create dataframe that contains the rows of df where the values of 'action:sub_action' is cause
+        df_cause = df.loc[df['action:sub_action'] == cause]
+        print('cause: ', cause)
+        #iterate the rows of df_cause
+        for index, row in df_cause.iterrows():
+            #create variable which is that value of 's_time' of the row
+            cause_time = row['s_time']
+            time_window = [cause_time-t_window, cause_time+t_window]
+            #iterate through the rows of df
+            for index2, row2 in df.iterrows():
+                #if the value of 'action:sub_action' of this row is not cause
+                if row2['action:sub_action'] != cause:
+                    #if the value of 's_time' of this row is within the time window
+                    if row2['s_time'] >= time_window[0] and row2['s_time'] <= time_window[1]:
+                        #create a variable that is the difference between the value of 's_time' of this row and the value of 's_time' of the cause row
+                        time_diff = row2['s_time'] - cause_time
+                        #add a new row to df_hist with the value of 'action:sub_action' of this row, the value of time_diff, the value of 'condition_' of this row, and the value of 'participant_' of this row
+                        df_hist.loc[len(df_hist.index)] = [cause, row2['action:sub_action'], time_diff, row2['condition'], row2['participant']]
 
     return df_hist
 
@@ -722,11 +730,11 @@ if __name__ == '__main__':
     #parameters
     output_folder = "output"
     path_out = os.path.join(output_folder)
-    run_calculations = 1
-    Nbins = 10
-    t_window = 10
-   #cause = 'robot text:pick up'
-    cause = 'Child utterance:utterance'
+    run_calculations = 0
+    t_window = 15
+    Nbins = 6
+    #cause = 'robot text:pick up'
+    #cause = 'Child utterance:utterance'
     if run_calculations == 1:
 
         interval = 0.3 #time interval between time steps
@@ -749,7 +757,6 @@ if __name__ == '__main__':
         df_pf_vs = pd.DataFrame()
         df_zeros = create_zero_df(granger_features, stitch_buffer)
         df_hist_all = pd.DataFrame()
-        df_hist_effect = pd.DataFrame()
 
 
         for file in files:
@@ -762,6 +769,7 @@ if __name__ == '__main__':
             file_split = file_base.split("_")
             lesson_split = list(file_split[0])
             condition_temp = lesson_split[2]
+            print('condition = ', condition_temp)
             if condition_temp == 'r':
                 condition = 1
             else:
@@ -788,31 +796,35 @@ if __name__ == '__main__':
 
             #create a variable named effects that is a list of all the unique values of 'action:sub_action' in df
             effects = df['action:sub_action'].unique()
-            #iterate through all the values of effects
-            for effect in effects:
-                print(effect)
-                cause = effect
-                df_hist = action_hist(df, t_window, cause, effects)
-                df_hist_effect = pd.concat([df_hist_effect, df_hist], axis=0)
-            df_hist_all = pd.concat([df_hist_all, df_hist_effect], axis=0)
+            causes = df['action:sub_action'].unique()
 
-            #pickle df_hist_all to the main folder
-        df_hist_all.to_pickle(os.path.join(path_out, 'df_hist_all.pkl'))
+
+            df_hist = action_hist(df, t_window, causes, effects)
+            df_hist_all = pd.concat([df_hist_all, df_hist], axis=0)
+
+        #pickle df_hist_all to the main folder
+        df_hist_all.to_pickle(os.path.join(path_out, 'df_hist_all_15.pkl'))
 
     #load the pickled df_hist_all
-    df_hist_all = pd.read_pickle(os.path.join(path_out, 'df_hist_all.pkl'))
+    df_hist_all = pd.read_pickle(os.path.join(path_out, 'df_hist_all_15.pkl'))
 
     #create and disdplay a plot for each effect in df_hist_all, in the plat draw two overlaid histograms, one for the condition 'r' and one for the condition 't'. Set the title of the plot to be the effect
-    for cause in df_hist_all['cause'].unique():
-        for effect in df_hist_all['effect'].unique():
+
+    #for cause in df_hist_all['cause'].unique():
+    for cause in ['robot text:pick up']:
+        #create a variable named df_hist_cause that is a dataframe that contains only the rows of df_hist_all where the value of 'cause' is equal to the value of cause
+        df_hist_cause = df_hist_all[df_hist_all['cause'] == cause]
+        for effect in df_hist_cause['effect'].unique():
             #create a dataframe that contains the rows of df_hist_all where the value of 'effect' is effect and the value of 'condition' is 'r'
-            df_hist_r = df_hist_all[(df_hist_all['effect'] == effect) & (df_hist_all['condition'] == 'r')]
+            df_hist_r = df_hist_cause[(df_hist_cause['effect'] == effect) & (df_hist_cause['condition'] == 'r')]
             #create a dataframe that contains the rows of df_hist_all where the value of 'effect' is effect and the value of 'condition' is 't'
-            df_hist_t = df_hist_all[(df_hist_all['effect'] == effect) & (df_hist_all['condition'] == 't')]
-            #create a plot with two overlaid histograms, one for the values of 'time_diff' in df_hist_r and one for the values of 'time_diff' in df_hist_t. Set the title of the plot to be effect. Set the color of the histogram for 'r' to be red and the color of the histogram for 't' to be blue
+            df_hist_t = df_hist_cause[(df_hist_cause['effect'] == effect) & (df_hist_cause['condition'] == 't')]
+            #create a plot with two overlaid histograms, one for the values of 'time_diff' in df_hist_r and one for the values of 'time_diff' in df_hist_t. Set the title of the plot to be effect. Set the color of the histogram for 'r' to be red and the color of the histogram for 't' to be blue. Set the number of bins to Nbins.
+
             plt.hist(df_hist_r['s_time'], color='red', alpha=0.5, label='r')
             plt.hist(df_hist_t['s_time'], color='blue', alpha=0.5, label='t')
-#set the title of the plot to be cause-effect
+
+            #set the title of the plot to be cause-effect
             plt.title(f"{cause}-{effect}")
             plt.legend(loc='upper right')
             #add a vertical line to the plot at x = 0
@@ -822,51 +834,112 @@ if __name__ == '__main__':
             #for each unique participant count the number of rows in df_hist_r where 's_time' is less than 0 and save the result in a new row of df_count_r with the value of 'count' being the count and the value of 'participant' being the participant
             for participant in df_hist_r['participant'].unique():
                 df_count_r = df_count_r.append({'count':len(df_hist_r[(df_hist_r['s_time'] < 0) & (df_hist_r['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            df_count_r_pre = df_count_r
             #calculate the mean and standard deviation of the values of 'count' in df_count_r
             mean_r = df_count_r['count'].mean()
             std_r = df_count_r['count'].std()
             #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
             plt.plot([-t_window,0], [mean_r, mean_r], color='red')
             #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
-            #plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
-            #plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
 
             #create a dataframe that has the columns 'count', participant'
             df_count_r = pd.DataFrame(columns=['count', 'participant'])
             #for each unique participant count the number of rows in df_hist_r where 's_time' is less than 0 and save the result in a new row of df_count_r with the value of 'count' being the count and the value of 'participant' being the participant
             for participant in df_hist_r['participant'].unique():
                 df_count_r = df_count_r.append({'count':len(df_hist_r[(df_hist_r['s_time'] > 0) & (df_hist_r['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            df_count_r_post = df_count_r
             #calculate the mean and standard deviation of the values of 'count' in df_count_r
             mean_r = df_count_r['count'].mean()
             std_r = df_count_r['count'].std()
             #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
             plt.plot([0,t_window], [mean_r, mean_r], color='red')
             #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
-            #plt.plot([0,t_window], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
-            #plt.plot([0,t_window], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
 
             #do the same thing for the condition 't'
             df_count_t = pd.DataFrame(columns=['count', 'participant'])
             for participant in df_hist_t['participant'].unique():
                 df_count_t = df_count_t.append({'count':len(df_hist_t[(df_hist_t['s_time'] < 0) & (df_hist_t['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            df_count_t_pre = df_count_t
             mean_t = df_count_t['count'].mean()
             std_t = df_count_t['count'].std()
             plt.plot([-t_window,0], [mean_t, mean_t], color='blue')
-            #plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
-            #plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
             #do the same thing for the condition 't'
             df_count_t = pd.DataFrame(columns=['count', 'participant'])
             for participant in df_hist_t['participant'].unique():
                 df_count_t = df_count_t.append({'count':len(df_hist_t[(df_hist_t['s_time'] > 0) & (df_hist_t['participant'] == participant)]), 'participant':participant}, ignore_index=True)
+            df_count_t_post = df_count_t
             mean_t = df_count_t['count'].mean()
             std_t = df_count_t['count'].std()
             plt.plot([0,t_window], [mean_t, mean_t], color='blue')
-            #plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
-            #plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+
+            #add a column named time to df_count_r_pre and set all its values to be 'pre'
+            df_count_r_pre['time'] = 'pre'
+            #add a column named time to df_count_r_post and set all its values to be 'post'
+            df_count_r_post['time'] = 'post'
+            #concatenate df_count_r_pre and df_count_r_post into a new dataframe df_r_prepost
+            df_r_prepost = pd.concat([df_count_r_pre, df_count_r_post])
+            #conduct a repeated measures ANOVA with participant as subjects, time as within and count as the dependent variable using statmodels
+            try:
+                rm_anova_r = AnovaRM(data=df_r_prepost, depvar='count', subject='participant', within=['time']).fit()
+                #print the results of the ANOVA
+                print(rm_anova_r)
+                #define ax
+                ax = plt.gca()
+                #print the anova results on the upper left corner of the plot using plt.text
+                ax.text(0.05, 0.95, str(rm_anova_r), transform=ax.transAxes, fontsize=6, verticalalignment='top')
+            except:
+                pass
+
+            #add a column named time to df_count_r_pre and set all its values to be 'pre'
+            df_count_t_pre['time'] = 'pre'
+            #add a column named time to df_count_r_post and set all its values to be 'post'
+            df_count_t_post['time'] = 'post'
+            #concatenate df_count_r_pre and df_count_r_post into a new dataframe df_r_prepost
+            df_t_prepost = pd.concat([df_count_t_pre, df_count_t_post])
+            #conduct a repeated measures ANOVA with participant as subjects, time as within and count as the dependent variable using statmodels
+            try:
+                rm_anova_t = AnovaRM(data=df_t_prepost, depvar='count', subject='participant', within=['time']).fit()
+                #print the results of the ANOVA
+                print(rm_anova_t)
+                #define ax
+                ax = plt.gca()
+                #print the anova results on the upper right corner of the plot using plt.text
+                ax.text(0.55, 0.95, str(rm_anova_t), transform=ax.transAxes, fontsize=6, verticalalignment='top')
+            except:
+                pass
+
+            #add a column named time to df_count_r_pre and set all its values to be 'pre'
+            df_count_r_post['condition'] = 'robot'
+            #add a column named time to df_count_r_post and set all its values to be 'post'
+            df_count_t_post['condition'] = 'tablet'
+            #concatenate df_count_r_pre and df_count_r_post into a new dataframe df_r_prepost
+            df_condition = pd.concat([df_count_t_post, df_count_r_post])
+            #conduct a repeated measures ANOVA with participant as subjects, time as within and count as the dependent variable using statmodels
+            try:
+                rm_anova_t = AnovaRM(data=df_condition, depvar='count', subject='participant', within=['condition']).fit()
+                #print the results of the ANOVA
+                print(rm_anova_t)
+                #define ax
+                ax = plt.gca()
+                #print the anova results on the lower right corner of the plot using plt.text
+                ax.text(0.55, 0.05, str(rm_anova_t), transform=ax.transAxes, fontsize=6, verticalalignment='top')
+            except:
+                pass
+
+
+
 
             plt.show()
 
-
+    #create a dataframe with the columns
 
 
 

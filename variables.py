@@ -46,7 +46,7 @@ hist_features = ['Child affect',
                   'Parent prop manipulation:parent','Parent gesture:point at prop', 'Child gesture:point at prop',
                   'Parent gaze:child', 'Parent gaze:props', 'Parent gaze:robot', 'Parent gaze:tablet',
                   'Parent utterance:utterance','robot text:positive feedback', 'robot text:pick up',
-                  'robot pointing:point at prop']
+                  'robot text:try again', 'robot text:put down', 'robot text:teach', 'robot pointing:point at prop']
 
 robot_vs_tablet_old = ['Child gaze:parent', 'Parent gaze:child', 'Mutual gaze:MG',
                    'Child gaze:object', 'Parent gaze:object',
