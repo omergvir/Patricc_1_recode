@@ -693,13 +693,38 @@ def remove_count_features(df, features):
     df['order'] = order
     return df
 
-def action_hist(df, t_window, causes, effects):
+def action_hist(df, df_action_occur, t_window, causes, effects):
     df_hist = pd.DataFrame(columns=['cause', 'effect', 's_time', 'condition','participant'])
     #iterate over all the elements in causes
+    #reset the index of df to start from 0
+    df = df.reset_index(drop=True)
     for cause in causes:
         #create dataframe that contains the rows of df where the values of 'action:sub_action' is cause
         df_cause = df.loc[df['action:sub_action'] == cause]
         print('cause: ', cause)
+        #if the column 'cause' in the dataframe df_action_occur has the value cause
+        if cause in df_action_occur['cause'].values:
+            # create a variable that is the number of rows in df_cause
+            cause_num = len(df_cause.index)
+            #if the value of 'condition' in the first row of df is 'r'
+
+            if df.at[0, 'condition'] == 'r':
+            #if df._get_value(0, 'condition') == 'r':
+                #add cause_num to the column 'robot count' at the row where the value of 'cause' is cause in df_action_occur
+                df_action_occur.loc[df_action_occur['cause'] == cause, 'robot count'] += cause_num
+            else:
+                #add cause_num to the column 'child count' at the row where the value of 'cause' is cause in df_action_occur
+                df_action_occur.loc[df_action_occur['cause'] == cause, 'tablet count'] += cause_num
+        else:
+            #if the value of 'condition' in the first row of df is 'r'
+            if df._get_value(0, 'condition') == 'r':
+                #add a row to df_action_occur where the value of 'cause' is cause and the value of 'robot count' is the number of rows in df_cause
+                df_action_occur.loc[len(df_action_occur.index)] = [cause, len(df_cause.index), 0]
+
+            else:
+                #add a row to df_action_occur where the value of 'cause' is cause and the value of 'tablet count' is the number of rows in df_cause
+                df_action_occur.loc[len(df_action_occur.index)] = [cause, 0, len(df_cause.index)]
+
         #iterate the rows of df_cause
         for index, row in df_cause.iterrows():
             #create variable which is that value of 's_time' of the row
@@ -716,7 +741,7 @@ def action_hist(df, t_window, causes, effects):
                         #add a new row to df_hist with the value of 'action:sub_action' of this row, the value of time_diff, the value of 'condition_' of this row, and the value of 'participant_' of this row
                         df_hist.loc[len(df_hist.index)] = [cause, row2['action:sub_action'], time_diff, row2['condition'], row2['participant']]
 
-    return df_hist
+    return df_hist, df_action_occur
 
 #write a function that takes in a dataframe, removes the rows where that value of 'action:sub_action' is not in the list of actions, and returns the dataframe
 def remove_actions(df, actions):
@@ -757,6 +782,8 @@ if __name__ == '__main__':
         df_pf_vs = pd.DataFrame()
         df_zeros = create_zero_df(granger_features, stitch_buffer)
         df_hist_all = pd.DataFrame()
+        #create a dataframe with the columns 'cause', 'robot count', 'tablet count'
+        df_action_occur = pd.DataFrame(columns=['cause', 'robot count', 'tablet count'])
 
 
         for file in files:
@@ -799,14 +826,32 @@ if __name__ == '__main__':
             causes = df['action:sub_action'].unique()
 
 
-            df_hist = action_hist(df, t_window, causes, effects)
+            df_hist, df_action_occur = action_hist(df, df_action_occur, t_window, causes, effects)
             df_hist_all = pd.concat([df_hist_all, df_hist], axis=0)
+
 
         #pickle df_hist_all to the main folder
         df_hist_all.to_pickle(os.path.join(path_out, 'df_hist_all_15.pkl'))
+        #pickle df_action_occur to the main folder
+        df_action_occur.to_pickle(os.path.join(path_out, 'df_action_occur_15.pkl'))
+
+
+
 
     #load the pickled df_hist_all
     df_hist_all = pd.read_pickle(os.path.join(path_out, 'df_hist_all_15.pkl'))
+    #load the pickled df_action_occur
+    df_action_occur = pd.read_pickle(os.path.join(path_out, 'df_action_occur_15.pkl'))
+
+    # sort df_action_occur by values of 'robot count'
+    df_action_occur = df_action_occur.sort_values(by=['robot count'], ascending=True)
+    # create and display a bar plot of df_action_occur
+    df_action_occur.plot.barh(x='cause', y=['robot count', 'tablet count'])
+    # make the chart narrower so that the labels are not cut off
+    plt.tight_layout()
+    # add the title 'occurance of events' the the chart
+    plt.title('occurance of events')
+    plt.show()
 
     #create and disdplay a plot for each effect in df_hist_all, in the plat draw two overlaid histograms, one for the condition 'r' and one for the condition 't'. Set the title of the plot to be the effect
 
@@ -819,10 +864,24 @@ if __name__ == '__main__':
             df_hist_r = df_hist_cause[(df_hist_cause['effect'] == effect) & (df_hist_cause['condition'] == 'r')]
             #create a dataframe that contains the rows of df_hist_all where the value of 'effect' is effect and the value of 'condition' is 't'
             df_hist_t = df_hist_cause[(df_hist_cause['effect'] == effect) & (df_hist_cause['condition'] == 't')]
-            #create a plot with two overlaid histograms, one for the values of 'time_diff' in df_hist_r and one for the values of 'time_diff' in df_hist_t. Set the title of the plot to be effect. Set the color of the histogram for 'r' to be red and the color of the histogram for 't' to be blue. Set the number of bins to Nbins.
+            #create a variable r_weights that is the value of the column 'robot count' in df_action_occur where the value of 'cause' is equal to cause
+            r_weights = df_action_occur[df_action_occur['cause'] == cause]['robot count'].values[0]
+            #create a list r_weights_list that is in the same length as df_hist_r['s_time'] and each element is the value of 1 divided by r_weights
+            r_weights_list = [1/r_weights] * len(df_hist_r['s_time'])
+            #multiple the values of r_weights_list by t_window*2
+            r_weights_list = [x * t_window*4 for x in r_weights_list]
+            #create a variable t_weights that is the value of the column 'tablet count' in df_action_occur where the value of 'cause' is equal to cause
+            t_weights = df_action_occur[df_action_occur['cause'] == cause]['tablet count'].values[0]
+            #create a list t_weights_list that is in the same length as df_hist_t['s_time'] and each element is the value of 1 divided by t_weights
+            t_weights_list = [1/t_weights] * len(df_hist_t['s_time'])
+            #multiple the values of t_weights_list by t_window*2
+            t_weights_list = [x * t_window*4 for x in t_weights_list]
 
-            plt.hist(df_hist_r['s_time'], color='red', alpha=0.5, label='r')
-            plt.hist(df_hist_t['s_time'], color='blue', alpha=0.5, label='t')
+            #create a plot with two overlaid histograms, one for the values of 'time_diff' in df_hist_r and one for the values of 'time_diff' in df_hist_t. Set the title of the plot to be effect. Set the color of the histogram for 'r' to be red and the color of the histogram for 't' to be blue. Set the number of bins to Nbins.
+            plt.hist(df_hist_r['s_time'], color='blue', alpha=0.5, label='robot', weights=r_weights_list)
+            plt.hist(df_hist_t['s_time'], color='red', alpha=0.5, label='tablet', weights=t_weights_list)
+
+
 
             #set the title of the plot to be cause-effect
             plt.title(f"{cause}-{effect}")
@@ -839,10 +898,10 @@ if __name__ == '__main__':
             mean_r = df_count_r['count'].mean()
             std_r = df_count_r['count'].std()
             #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
-            plt.plot([-t_window,0], [mean_r, mean_r], color='red')
+            plt.plot([-t_window,0], [mean_r, mean_r], color='blue')
             #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
-            plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
-            plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='blue', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='blue', linestyle='--', linewidth=2)
 
             #create a dataframe that has the columns 'count', participant'
             df_count_r = pd.DataFrame(columns=['count', 'participant'])
@@ -853,11 +912,15 @@ if __name__ == '__main__':
             #calculate the mean and standard deviation of the values of 'count' in df_count_r
             mean_r = df_count_r['count'].mean()
             std_r = df_count_r['count'].std()
+            #divide mean_r by r_weights
+            mean_r = mean_r/r_weights
+            #divide std_r by r_weights
+            std_r = std_r/r_weights
             #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
-            plt.plot([0,t_window], [mean_r, mean_r], color='red')
+            plt.plot([0,t_window], [mean_r, mean_r], color='blue')
             #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
-            plt.plot([0,t_window], [mean_r+std_r,mean_r+std_r], color='r', linestyle='--', linewidth=2)
-            plt.plot([0,t_window], [mean_r-std_r,mean_r-std_r], color='r', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_r+std_r,mean_r+std_r], color='blue', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_r-std_r,mean_r-std_r], color='blue', linestyle='--', linewidth=2)
 
             #do the same thing for the condition 't'
             df_count_t = pd.DataFrame(columns=['count', 'participant'])
@@ -866,9 +929,16 @@ if __name__ == '__main__':
             df_count_t_pre = df_count_t
             mean_t = df_count_t['count'].mean()
             std_t = df_count_t['count'].std()
-            plt.plot([-t_window,0], [mean_t, mean_t], color='blue')
-            plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
-            plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+            #divide mean_t by t_weights
+            mean_t = mean_t/t_weights
+            #divide std_t by t_weights
+            std_t = std_t/t_weights
+
+
+
+            plt.plot([-t_window,0], [mean_t, mean_t], color='red')
+            plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='red', linestyle='--', linewidth=2)
+            plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='red', linestyle='--', linewidth=2)
             #do the same thing for the condition 't'
             df_count_t = pd.DataFrame(columns=['count', 'participant'])
             for participant in df_hist_t['participant'].unique():
@@ -876,9 +946,9 @@ if __name__ == '__main__':
             df_count_t_post = df_count_t
             mean_t = df_count_t['count'].mean()
             std_t = df_count_t['count'].std()
-            plt.plot([0,t_window], [mean_t, mean_t], color='blue')
-            plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='b', linestyle='--', linewidth=2)
-            plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='b', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_t, mean_t], color='red')
+            plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='red', linestyle='--', linewidth=2)
+            plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='red', linestyle='--', linewidth=2)
 
             #add a column named time to df_count_r_pre and set all its values to be 'pre'
             df_count_r_pre['time'] = 'pre'
@@ -938,9 +1008,5 @@ if __name__ == '__main__':
 
 
             plt.show()
-
-    #create a dataframe with the columns
-
-
 
 
