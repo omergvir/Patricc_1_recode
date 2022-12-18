@@ -856,7 +856,7 @@ if __name__ == '__main__':
     #create and disdplay a plot for each effect in df_hist_all, in the plat draw two overlaid histograms, one for the condition 'r' and one for the condition 't'. Set the title of the plot to be the effect
 
     #for cause in df_hist_all['cause'].unique():
-    for cause in ['robot text:pick up']:
+    for cause in ['Parent utterance:utterance']:
         #create a variable named df_hist_cause that is a dataframe that contains only the rows of df_hist_all where the value of 'cause' is equal to the value of cause
         df_hist_cause = df_hist_all[df_hist_all['cause'] == cause]
         for effect in df_hist_cause['effect'].unique():
@@ -888,6 +888,10 @@ if __name__ == '__main__':
             plt.legend(loc='upper right')
             #add a vertical line to the plot at x = 0
             plt.axvline(x=0, color='k', linestyle='--')
+
+
+
+
             #create a dataframe that has the columns 'count', participant'
             df_count_r = pd.DataFrame(columns=['count', 'participant'])
             #for each unique participant count the number of rows in df_hist_r where 's_time' is less than 0 and save the result in a new row of df_count_r with the value of 'count' being the count and the value of 'participant' being the participant
@@ -897,11 +901,18 @@ if __name__ == '__main__':
             #calculate the mean and standard deviation of the values of 'count' in df_count_r
             mean_r = df_count_r['count'].mean()
             std_r = df_count_r['count'].std()
+            #divide mean_r by r_weights
+            mean_r = mean_r/r_weights
+            #divide std_r by r_weights
+            std_r = std_r/r_weights
+
             #overlay a horizontal line at y = mean_r and x = [-10,0], set the color of the line to be the same as the color of the histogram for 'r'
             plt.plot([-t_window,0], [mean_r, mean_r], color='blue')
             #plot two more lines on the same x range with y values of mean_r +/- std_r, set the color of the lines to be 'r' but make the lines dashed
             plt.plot([-t_window,0], [mean_r+std_r,mean_r+std_r], color='blue', linestyle='--', linewidth=2)
             plt.plot([-t_window,0], [mean_r-std_r,mean_r-std_r], color='blue', linestyle='--', linewidth=2)
+
+
 
             #create a dataframe that has the columns 'count', participant'
             df_count_r = pd.DataFrame(columns=['count', 'participant'])
@@ -936,6 +947,7 @@ if __name__ == '__main__':
 
 
 
+
             plt.plot([-t_window,0], [mean_t, mean_t], color='red')
             plt.plot([-t_window,0], [mean_t+std_t,mean_t+std_t], color='red', linestyle='--', linewidth=2)
             plt.plot([-t_window,0], [mean_t-std_t,mean_t-std_t], color='red', linestyle='--', linewidth=2)
@@ -946,20 +958,57 @@ if __name__ == '__main__':
             df_count_t_post = df_count_t
             mean_t = df_count_t['count'].mean()
             std_t = df_count_t['count'].std()
+            #divide mean_t by t_weights
+            mean_t = mean_t/t_weights
+            #divide std_t by t_weights
+            std_t = std_t/t_weights
             plt.plot([0,t_window], [mean_t, mean_t], color='red')
             plt.plot([0,t_window], [mean_t+std_t,mean_t+std_t], color='red', linestyle='--', linewidth=2)
             plt.plot([0,t_window], [mean_t-std_t,mean_t-std_t], color='red', linestyle='--', linewidth=2)
+            plt.show()
+
+
+            #create a dataframe that has the columns 'robot pre', 'robot post', 'tablet pre' and tablet post'
+            df_count = pd.DataFrame(columns=['robot pre', 'robot post', 'tablet pre', 'tablet post'])
+            #set the values of the column 'robot pre' to be the values of 'count' in df_count_r_pre
+            df_count['robot pre'] = df_count_r_pre['count']
+            #set the values of the column 'robot post' to be the values of 'count' in df_count_r_post
+            df_count['robot post'] = df_count_r_post['count']
+            #set the values of the column 'tablet pre' to be the values of 'count' in df_count_t_pre
+            df_count['tablet pre'] = df_count_t_pre['count']
+            #set the values of the column 'tablet post' to be the values of 'count' in df_count_t_post
+            df_count['tablet post'] = df_count_t_post['count']
+            #divide the values of the columns 'robot pre' and 'robot post' by r_weights
+            df_count['robot pre'] = df_count['robot pre']/r_weights
+            df_count['robot post'] = df_count['robot post']/r_weights
+            #divide the values of the columns 'tablet pre' and 'tablet post' by t_weights
+            df_count['tablet pre'] = df_count['tablet pre']/t_weights
+            df_count['tablet post'] = df_count['tablet post']/t_weights
+            #convert the values of df_count to numeric
+            df_count = df_count.apply(pd.to_numeric)
+            #create a plot of boxplots for the columns 'robot pre', 'robot post', 'tablet pre' and 'tablet post'
+            df_count.boxplot(column=['robot pre', 'robot post', 'tablet pre', 'tablet post'])
+            plt.title(f"{cause}-{effect}")
+
+
+
+
 
             #add a column named time to df_count_r_pre and set all its values to be 'pre'
             df_count_r_pre['time'] = 'pre'
             #add a column named time to df_count_r_post and set all its values to be 'post'
             df_count_r_post['time'] = 'post'
+            #divide the values of the column 'count' in df_count_r_pre by r_weights
+            df_count_r_pre['count'] = df_count_r_pre['count']/r_weights
+            #divide the values of the column 'count' in df_count_r_post by r_weights
+            df_count_r_post['count'] = df_count_r_post['count']/r_weights
             #concatenate df_count_r_pre and df_count_r_post into a new dataframe df_r_prepost
             df_r_prepost = pd.concat([df_count_r_pre, df_count_r_post])
             #conduct a repeated measures ANOVA with participant as subjects, time as within and count as the dependent variable using statmodels
             try:
                 rm_anova_r = AnovaRM(data=df_r_prepost, depvar='count', subject='participant', within=['time']).fit()
                 #print the results of the ANOVA
+                print('robot pre post')
                 print(rm_anova_r)
                 #define ax
                 ax = plt.gca()
@@ -972,12 +1021,17 @@ if __name__ == '__main__':
             df_count_t_pre['time'] = 'pre'
             #add a column named time to df_count_r_post and set all its values to be 'post'
             df_count_t_post['time'] = 'post'
+            #divide the value of the column 'count' in df_count_t_pre by t_weights
+            df_count_t_pre['count'] = df_count_t_pre['count']/t_weights
+            #divide the value of the column 'count' in df_count_t_post by t_weights
+            df_count_t_post['count'] = df_count_t_post['count']/t_weights
             #concatenate df_count_r_pre and df_count_r_post into a new dataframe df_r_prepost
             df_t_prepost = pd.concat([df_count_t_pre, df_count_t_post])
             #conduct a repeated measures ANOVA with participant as subjects, time as within and count as the dependent variable using statmodels
             try:
                 rm_anova_t = AnovaRM(data=df_t_prepost, depvar='count', subject='participant', within=['time']).fit()
                 #print the results of the ANOVA
+                print('tablet pre post')
                 print(rm_anova_t)
                 #define ax
                 ax = plt.gca()
@@ -996,17 +1050,20 @@ if __name__ == '__main__':
             try:
                 rm_anova_t = AnovaRM(data=df_condition, depvar='count', subject='participant', within=['condition']).fit()
                 #print the results of the ANOVA
+                print('robot vs tablet post')
                 print(rm_anova_t)
                 #define ax
                 ax = plt.gca()
                 #print the anova results on the lower right corner of the plot using plt.text
-                ax.text(0.55, 0.05, str(rm_anova_t), transform=ax.transAxes, fontsize=6, verticalalignment='top')
+                #ax.text(0.55, 0.05, str(rm_anova_t), transform=ax.transAxes, fontsize=6, verticalalignment='top')
             except:
                 pass
 
-
-
-
             plt.show()
+
+
+
+
+
 
 
